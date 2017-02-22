@@ -1,0 +1,25 @@
+{
+  "name": "photoBooth",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^3.16.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-babel": "^4.0.1",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "react-scripts": "0.9.0"
+  },
+  "dependencies": {
+    "re-bulma": "^0.3.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-icons": "^2.2.3",
+    "react-webcam": "^0.0.14"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

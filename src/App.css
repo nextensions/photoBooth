@@ -1,0 +1,113 @@
+@font-face {
+    font-family: 'THSarabunNewBold';
+    src: url('fonts/thsarabunnewbold.eot');
+    src: url('fonts/thsarabunnewbold.eot') format('embedded-opentype'),
+         url('fonts/thsarabunnewbold.woff') format('woff'),
+         url('fonts/thsarabunnewbold.ttf') format('truetype'),
+         url('fonts/thsarabunnewbold.svg#THSarabunNewBold') format('svg');
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: THSarabunNewBold;
+}
+
+.webfont {
+  font-family: THSarabunNewBold;
+}
+
+.webcam { 
+  position: absolute;
+  top: 230px;
+  left: 175px;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: shake infinite 10s linear;
+  height: 50px;
+  filter: brightness(0) invert(1);
+  -webkit-animation-name: shake;
+  animation-name: shake;
+}
+
+.App-brand {
+  filter: brightness(0) invert(1);
+  width: 180px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.App-heroHead, .App-heroSection {
+  background-color: #F15C27;
+  color: white;
+}
+
+.white {
+  color: white;
+}
+
+.App-camera {
+  /*height: 80px;*/
+}
+
+.App-card {
+  background-color: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.1), 0 0 2px 0 rgba(0,0,0,0.1);
+  transition: box-shadow ease-out 0.2s;
+  cursor: pointer;
+  margin-bottom: 20px;
+  overflow: hidden;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -o-border-radius: 8px;
+  -ms-border-radius: 8px;
+  border-radius: 8px;
+  margin-top: 25px;
+}
+
+.App-card:hover {
+  box-shadow:0 19px 38px 0 rgba(0,0,0,0.3),0 15px 12px 0 rgba(0,0,0,0.2);
+  text-decoration:none;
+}
+
+.App-cardThumbs {
+  max-width: 200px;
+  background-color: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.1), 0 0 2px 0 rgba(0,0,0,0.1);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -o-border-radius: 4px;
+  -ms-border-radius: 4px;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: box-shadow ease-out 0.2s;
+  cursor: pointer;
+}
+
+.App-cardThumbs:hover {
+  box-shadow:0 10px 20px 0 rgba(0,0,0,0.3),0 7px 6px 0 rgba(0,0,0,0.2);
+  text-decoration:none;
+}
+
+@-webkit-keyframes shake {
+    0%, 100% {-webkit-transform: translateY(0);}
+    10%, 30%, 50%, 70%, 90% {-webkit-transform: translateY(-5px);}
+    20%, 40%, 60%, 80% {-webkit-transform: translateY(0px);}
+}
+@keyframes shake {
+    0%, 100% {transform: translateY(0);}
+    10%, 30%, 50%, 70%, 90% {transform: translateY(-5px);}
+    20%, 40%, 60%, 80% {transform: translateY(0px);}
+}
