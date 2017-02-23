@@ -36,7 +36,6 @@ class App extends Component {
                   <Image src="assets/img/camera.png" alt="Camera" style={{ marginBottom: '5px', zIndex: 9999 }} />
                   <Webcam audio={false} width="240" height="180" className="webcam" />
                 </Column>
-
                 <Column size="is5" style={style} is-fullheight>
                   <Hero>
                     <HeroBody>
