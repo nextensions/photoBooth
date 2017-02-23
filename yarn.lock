@@ -136,6 +136,10 @@ array-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/array-equal/-/array-equal-1.0.0.tgz#8c2a5ef2472fd9ea742b04c77a75093ba2757c93"
 
+array-find@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/array-find/-/array-find-1.0.0.tgz#6c8e286d11ed768327f8e62ecee87353ca3e78b8"
+
 array-flatten@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/array-flatten/-/array-flatten-1.1.1.tgz#9a5f699051b1e7073328f2a008968b64ea2955d2"
@@ -180,9 +184,21 @@ assert@^1.1.1:
   dependencies:
     util "0.10.3"
 
+ast-transform@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/ast-transform/-/ast-transform-0.0.0.tgz#74944058887d8283e189d954600947bc98fe0062"
+  dependencies:
+    escodegen "~1.2.0"
+    esprima "~1.0.4"
+    through "~2.3.4"
+
 ast-types-flow@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/ast-types-flow/-/ast-types-flow-0.0.7.tgz#f70b735c6bca1a5c9c22d982c3e39e7feba3bdad"
+
+ast-types@^0.7.0:
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/ast-types/-/ast-types-0.7.8.tgz#902d2e0d60d071bdcd46dc115e1809ed11c138a9"
 
 async-each@^1.0.0:
   version "1.0.1"
@@ -1006,6 +1022,10 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
+bowser@^1.0.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/bowser/-/bowser-1.6.0.tgz#37fc387b616cb6aef370dab4d6bd402b74c5c54d"
+
 brace-expansion@^1.0.0:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.6.tgz#7197d7eaa9b87e648390ea61fc66c84427420df9"
@@ -1021,7 +1041,7 @@ braces@^1.8.2:
     preserve "^0.2.0"
     repeat-element "^1.1.2"
 
-browser-resolve@^1.11.2:
+browser-resolve@^1.11.2, browser-resolve@^1.8.1:
   version "1.11.2"
   resolved "https://registry.yarnpkg.com/browser-resolve/-/browser-resolve-1.11.2.tgz#8ff09b0a2c421718a1051c260b32e48f442938ce"
   dependencies:
@@ -1032,6 +1052,14 @@ browserify-aes@0.4.0:
   resolved "https://registry.yarnpkg.com/browserify-aes/-/browserify-aes-0.4.0.tgz#067149b668df31c4b58533e02d01e806d8608e2c"
   dependencies:
     inherits "^2.0.1"
+
+browserify-optional@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/browserify-optional/-/browserify-optional-1.0.0.tgz#20cf7ab1e7bf014cbf63782d35d75b62dab4b6f1"
+  dependencies:
+    ast-transform "0.0.0"
+    ast-types "^0.7.0"
+    browser-resolve "^1.8.1"
 
 browserify-zlib@^0.1.4:
   version "0.1.4"
@@ -1178,6 +1206,10 @@ clap@^1.0.9:
   resolved "https://registry.yarnpkg.com/clap/-/clap-1.1.2.tgz#316545bf22229225a2cecaa6824cd2f56a9709ed"
   dependencies:
     chalk "^1.1.3"
+
+classnames@^2.1.1:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
 clean-css@4.0.x:
   version "4.0.7"
@@ -1710,6 +1742,10 @@ electron-to-chromium@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.2.2.tgz#e41bc9488c88e3cfa1e94bde28e8420d7d47c47c"
 
+element-class@^0.2.0:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/element-class/-/element-class-0.2.2.tgz#9d3bbd0767f9013ef8e1c8ebe722c1402a60050e"
+
 emoji-regex@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-6.1.0.tgz#d14ef743a7dfa6eaf436882bd1920a4aed84dd94"
@@ -1822,6 +1858,16 @@ escodegen@^1.6.1:
     optionator "^0.8.1"
   optionalDependencies:
     source-map "~0.2.0"
+
+escodegen@~1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/escodegen/-/escodegen-1.2.0.tgz#09de7967791cc958b7f89a2ddb6d23451af327e1"
+  dependencies:
+    esprima "~1.0.4"
+    estraverse "~1.5.0"
+    esutils "~1.0.0"
+  optionalDependencies:
+    source-map "~0.1.30"
 
 escope@^3.6.0:
   version "3.6.0"
@@ -2012,6 +2058,10 @@ esprima@^3.1.1:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-3.1.3.tgz#fdca51cee6133895e3c88d535ce49dbff62a4633"
 
+esprima@~1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/esprima/-/esprima-1.0.4.tgz#9f557e08fc3b4d26ece9dd34f8fbf476b62585ad"
+
 esprima@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-3.0.0.tgz#53cf247acda77313e551c3aa2e73342d3fb4f7d9"
@@ -2031,6 +2081,10 @@ estraverse@^4.1.1, estraverse@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/estraverse/-/estraverse-4.2.0.tgz#0dee3fed31fcd469618ce7342099fc1afa0bdb13"
 
+estraverse@~1.5.0:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/estraverse/-/estraverse-1.5.1.tgz#867a3e8e58a9f84618afb6c2ddbcd916b7cbaf71"
+
 estraverse@~4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/estraverse/-/estraverse-4.1.1.tgz#f6caca728933a850ef90661d0e17982ba47111a2"
@@ -2039,9 +2093,17 @@ esutils@^2.0.0, esutils@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.2.tgz#0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
 
+esutils@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/esutils/-/esutils-1.0.0.tgz#8151d358e20c8acc7fb745e7472c0025fe496570"
+
 etag@~1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.7.0.tgz#03d30b5f67dd6e632d2945d30d6652731a34d5d8"
+
+eve@~0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/eve/-/eve-0.4.2.tgz#7eea0afc0e4efb7c9365615315a3576833ead2ae"
 
 event-emitter@~0.3.4:
   version "0.3.4"
@@ -2069,6 +2131,14 @@ exec-sh@^0.2.0:
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.2.0.tgz#14f75de3f20d286ef933099b2ce50a90359cef10"
   dependencies:
     merge "^1.1.3"
+
+exenv@^1.2.0:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.1.tgz#75de1c8dee02e952b102aa17f8875973e0df14f9"
+
+exenv@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.0.tgz#3835f127abf075bfe082d0aed4484057c78e3c89"
 
 exit-hook@^1.0.0:
   version "1.1.1"
@@ -2635,6 +2705,17 @@ inherits@2.0.1:
 ini@~1.3.0:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.4.tgz#0537cb79daf59b59a1a517dff706c86ec039162e"
+
+inline-style-prefix-all@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/inline-style-prefix-all/-/inline-style-prefix-all-2.0.2.tgz#44e23c00d3521a36041e07c9b1e81bf36770b08c"
+
+inline-style-prefixer@^1.0.3:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/inline-style-prefixer/-/inline-style-prefixer-1.0.4.tgz#849f657373a5cfbd8141cfddb013df6f68c6df39"
+  dependencies:
+    bowser "^1.0.0"
+    inline-style-prefix-all "^2.0.2"
 
 inquirer@^0.12.0:
   version "0.12.0"
@@ -4246,6 +4327,15 @@ querystringify@0.0.x:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-0.0.4.tgz#0cf7f84f9463ff0ae51c4c4b142d95be37724d9c"
 
+radium@^0.18.1:
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/radium/-/radium-0.18.1.tgz#a01db9b4c6e6364de3b02d5976adf28d0b98351d"
+  dependencies:
+    array-find "^1.0.0"
+    exenv "^1.2.0"
+    inline-style-prefixer "^1.0.3"
+    rimraf "^2.4.0"
+
 randomatic@^1.1.3:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-1.1.6.tgz#110dcabff397e9dcff7c0789ccc0a49adf1ec5bb"
@@ -4280,6 +4370,16 @@ react:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
+react-burger-menu:
+  version "1.10.12"
+  resolved "https://registry.yarnpkg.com/react-burger-menu/-/react-burger-menu-1.10.12.tgz#503584c9b171a659171a5f9326b2282ad063ac87"
+  dependencies:
+    browserify-optional "^1.0.0"
+    classnames "^2.1.1"
+    eve "~0.4.2"
+    radium "^0.18.1"
+    snapsvg-cjs "0.0.4"
+
 react-dev-utils@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-0.5.0.tgz#aedbf69cb1fbedb6f42350e4a988021f5cb4c493"
@@ -4309,6 +4409,24 @@ react-icons:
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-2.2.3.tgz#3b4847923065ecb09f8ba7f7e422112de0195196"
   dependencies:
     react-icon-base "2.0.4"
+
+react-image-lightbox:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/react-image-lightbox/-/react-image-lightbox-3.4.2.tgz#11e41b99f405369cee0017241df7a0dfd0fc11a5"
+  dependencies:
+    react-modal "^1.4.0"
+
+react-medium-image-zoom:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/react-medium-image-zoom/-/react-medium-image-zoom-0.8.0.tgz#e9166eb0523f3de2be7fd9e88f024f05330695b1"
+
+react-modal@^1.4.0:
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-1.6.5.tgz#f720d99bd81b1def5c2c32e0ffaa48bdaf484862"
+  dependencies:
+    element-class "^0.2.0"
+    exenv "1.2.0"
+    lodash.assign "^4.2.0"
 
 react-scripts:
   version "0.9.0"
@@ -4610,7 +4728,7 @@ right-align@^0.1.1:
   dependencies:
     align-text "^0.1.1"
 
-rimraf@^2.2.8, rimraf@^2.4.3, rimraf@^2.4.4, rimraf@2:
+rimraf@^2.2.8, rimraf@^2.4.0, rimraf@^2.4.3, rimraf@^2.4.4, rimraf@2:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.0.tgz#89b8a0fe432b9ff9ec9a925a00b6cdb3a91bbada"
   dependencies:
@@ -4742,6 +4860,18 @@ slice-ansi@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
 
+snapsvg-cjs@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/snapsvg-cjs/-/snapsvg-cjs-0.0.4.tgz#106ca5b82a79824101f06c568e1a2563659c451d"
+  dependencies:
+    snapsvg "0.4.0"
+
+snapsvg@0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/snapsvg/-/snapsvg-0.4.0.tgz#e0767014167825957de7e125c29b0fa89796ea03"
+  dependencies:
+    eve "~0.4.2"
+
 sntp@1.x.x:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/sntp/-/sntp-1.0.9.tgz#6541184cc90aeea6c6e7b35e2659082443c66198"
@@ -4802,6 +4932,12 @@ source-map@^0.4.4, source-map@~0.4.1:
 source-map@^0.5.0, source-map@^0.5.3, source-map@^0.5.6, source-map@~0.5.1, source-map@~0.5.3, source-map@0.5.x:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
+
+source-map@~0.1.30:
+  version "0.1.43"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.1.43.tgz#c24bc146ca517c1471f5dacbe2571b2b7f9e3346"
+  dependencies:
+    amdefine ">=0.0.4"
 
 source-map@~0.2.0:
   version "0.2.0"
@@ -5008,7 +5144,7 @@ throat@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/throat/-/throat-3.0.0.tgz#e7c64c867cbb3845f10877642f7b60055b8ec0d6"
 
-through@^2.3.6:
+through@^2.3.6, through@~2.3.4:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
 

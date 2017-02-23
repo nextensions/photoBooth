@@ -17,8 +17,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .webcam { 
   position: absolute;
-  top: 230px;
-  left: 175px;
+  top: 425px;
+  left: 390px;
 }
 
 .App {
@@ -44,6 +44,10 @@ h1, h2, h3, h4, h5, h6 {
   padding: 20px;
   color: white;
 }
+.App-burger {
+  opacity: 0.5;
+  cursor: pointer;
+}
 
 .App-intro {
   font-size: large;
@@ -60,6 +64,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .App-camera {
   /*height: 80px;*/
+  width: 80%;
+  float: right;
 }
 
 .App-card {
@@ -74,7 +80,8 @@ h1, h2, h3, h4, h5, h6 {
   -o-border-radius: 8px;
   -ms-border-radius: 8px;
   border-radius: 8px;
-  margin-top: 25px;
+  margin-top: 110px;
+  width: 80%;
 }
 
 .App-card:hover {

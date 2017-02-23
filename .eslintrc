@@ -1,0 +1,53 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "node": true,
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "mocha": true
+  },
+  "extends": "airbnb",
+  "installedESLint": true,
+  "plugins": [
+    "babel",
+    "import",
+    "react"
+  ],
+  "globals": {
+    "__DEV__": 1,
+    "Promise": 1,
+    "FormData": 1,
+    "fetch": 1,
+    "expect": 1,
+    "sinon": 1,
+    "appiumUtils": 1,
+    "testConfig": 1
+  },
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "ecmaFeatures": {
+      "jsx": true,
+      "restParams": true,
+      "spread": true,
+      "experimentalObjectRestSpread": true
+    },
+    "sourceType": "module",
+  },
+  "rules": {
+    "indent": ["error", 2, {"SwitchCase": 1}],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "class-methods-use-this": "off",
+    "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx"] }],
+    "react/prefer-stateless-function": "off",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/require-extension": "off",
+    "react/forbid-prop-types": "off",
+    "semi": ["error", "never"],
+    "eol-last": "off",
+    "no-use-before-define": "off",
+    "import/no-extraneous-dependencies": "off",
+  }
+}
