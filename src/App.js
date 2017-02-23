@@ -23,8 +23,8 @@ class App extends Component {
         height:480,
       },
       imageSize: {
-        width:240,
-        height:180,
+        width:320,
+        height:240,
       },
       cardSize: {
         width:400,
@@ -45,12 +45,12 @@ class App extends Component {
     var video = document.getElementById('video');
     var tracker = new window.tracking.ObjectTracker(['face']);
     tracker.setInitialScale(4);
-    tracker.setStepSize(1);
-    tracker.setEdgesDensity(0.1);
+    tracker.setStepSize(2);
+    tracker.setEdgesDensity(0.01);
     window.tracking.track(video, tracker, { camera: true });
     tracker.on('track', function(event) {
-      self.setState({faceList:event.data});
       if (event.data.length !== 0) {
+        self.setState({faceList:event.data});
         let max = event.data.reduce(function (a, b) { return a.width > b.width ? a : b; });
         self.setState({current:max});
         let video = document.getElementById('video');
@@ -61,6 +61,7 @@ class App extends Component {
     });
   }
   componentDidUpdate() {
+    console.log(new Date, "update")
     let context = this.refs.canvas.getContext('2d');
     context.clearRect(0, 0, this.state.cardSize.width, this.state.cardSize.height);
     // Add Card
@@ -115,7 +116,8 @@ class App extends Component {
                 <Column size="is1" style={style}>&nbsp;</Column>
                 <Column size="is5" style={style}>
                   <Image src="assets/img/camera.png" alt="Camera" style={{ marginBottom: '5px', zIndex: 9999 }} />
-                  <video className="webcam" id="video" width={this.state.imageSize.width}  height={this.state.imageSize.height} preload autoPlay loop muted></video>
+                  <Webcam audio={false} width="240" height="180" className="webcam" />
+                  <video className="webcam" id="video" width={this.state.imageSize.width} style={{visibility:"hidden"}} height={this.state.imageSize.height} preload autoPlay loop muted></video>
                   <canvas ref="tempVideo" width={this.state.imageSize.width} style={{display:"none"}} height={this.state.imageSize.height}/>
                   <img src={template} onLoad={this.onImgLoad} ref="template" style={{display:"none"}} width={this.state.imageSize.width} height={this.state.imageSize.height} alt=""/>
                   { FaceList }
@@ -125,7 +127,7 @@ class App extends Component {
                   <Hero>
                     <HeroBody>
                       <Container>
-                        <canvas ref="canvas" width={this.state.cardSize.width} height={this.state.cardSize.height} style={{ marginBottom: '5px' }} ratio="is4By3" className="App-card" ></canvas>
+                        <canvas className="App-card" ref="canvas" width={this.state.cardSize.width} height={this.state.cardSize.height} style={{ marginBottom: '5px' }}></canvas>
                       </Container>
                     </HeroBody>
                   </Hero>
