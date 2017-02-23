@@ -4,7 +4,8 @@ import keydown from 'react-keydown';
 import Webcam from 'react-webcam'
 import mascot from './img/mascot.svg'
 import brand from './img/textOnly.svg'
-import template from './template/udon.png'
+import cardUdon from './template/udon.png'
+import cardUbon from './template/ubon.jpg'
 import 'tracking';
 import './data/face.js';
 import './App.css'
@@ -16,7 +17,24 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      index: 0,
+      cardData: [
+        {
+          name: 'โรงเรียนอุบล',
+          src: cardUbon,
+          captureSize: { width: 98, height: (98 / 3) * 4 },
+          capturePosition:  { x: 15, y: 83 },
+        },
+        {
+          name: 'โรงเรียนอุดร',
+          src: cardUdon,
+          captureSize: { width: 90, height: 120 },
+          capturePosition:  { x: 17, y: 86 },
+        },
+      ],
+      currentCardData: cardUbon,
       faceList: [],
+      cardGenerateList: [],
       current: {},
       videoSize: {
         width:640,
@@ -26,18 +44,16 @@ class App extends Component {
         width:320,
         height:240,
       },
+      cardDataSize: {
+        width:1,
+        height:1,
+      },
       cardSize: {
         width:400,
         height:251,
       },
-      captureSize: {
-        width:90,
-        height:120
-      },
-      capturePosition: {
-        x:17,
-        y:86
-      }
+      captureSize: { width: 98, height: (98 / 3) * 4 },
+      capturePosition:  { x: 15, y: 83 },
     };
   }
   componentDidMount() {
@@ -50,6 +66,7 @@ class App extends Component {
     window.tracking.track(video, tracker, { camera: true });
     tracker.on('track', function(event) {
       if (event.data.length !== 0) {
+
         self.setState({faceList:event.data});
         let max = event.data.reduce(function (a, b) { return a.width > b.width ? a : b; });
         self.setState({current:max});
@@ -61,11 +78,10 @@ class App extends Component {
     });
   }
   componentDidUpdate() {
-    console.log(new Date, "update")
-    let context = this.refs.canvas.getContext('2d');
+    let context = this.refs.cardTemplate.getContext('2d');
     context.clearRect(0, 0, this.state.cardSize.width, this.state.cardSize.height);
     // Add Card
-    context.drawImage(this.refs.template, 0, 0, this.state.cardSize.width, this.state.cardSize.height, 0, 0, this.state.cardSize.width, this.state.cardSize.height);
+    context.drawImage(this.refs.template, 0, 0, this.state.cardDataSize.width, this.state.cardDataSize.height, 0, 0, this.state.cardSize.width, this.state.cardSize.height);
     // Add Background
     context.beginPath();
     context.rect(this.state.capturePosition.x, this.state.capturePosition.y, this.state.captureSize.width, this.state.captureSize.height);
@@ -86,13 +102,64 @@ class App extends Component {
   componentWillReceiveProps({ keydown }) {
     if (keydown.event && keydown.event.which === 13) {
       //on Enter
-      console.log(keydown.event.which);
+      this.capture()
+    } else if (keydown.event && keydown.event.which === 39) {
+      this.handleNextCard()
+    } else if (keydown.event && keydown.event.which === 37) {
+      this.handlePreviusCard()
     }
+  }
+  handleNextCard() {
+    let index = this.state.index;
+    index++;
+    if (index >= this.state.cardData.length) {
+      index = 0;
+    }
+    this.setState({
+      index: index,
+      currentCardData: this.state.cardData[index].src,
+      captureSize: this.state.cardData[index].captureSize,
+      capturePosition: this.state.cardData[index].capturePosition,
+    })
+  }
+  handlePreviusCard() {
+    let index = this.state.index;
+    index--;
+    if (index < 0) {
+      index = this.state.cardData.length - 1;
+    }
+    this.setState({
+      index: index,
+      currentCardData: this.state.cardData[index].src,
+      captureSize: this.state.cardData[index].captureSize,
+      capturePosition: this.state.cardData[index].capturePosition,
+    })
+  }
+  capture() {
+    let cardGenerateList = this.state.cardGenerateList;
+    cardGenerateList.push({
+      canvas:this.refs.cardTemplate,
+      src:this.refs.cardTemplate.toDataURL('image/png')
+    });
+    this.setState({cardGenerateList:cardGenerateList});
+  }
+  onImgLoad({target:img}) {
+    this.setState({
+      cardDataSize:{
+        width:img.offsetWidth,
+        height:img.offsetHeight,
+      }
+    })
   }
   render() {
     let FaceList = this.state.faceList.map((item,key) => {
       return <div key={key}>All:{JSON.stringify(item)}</div>
     })
+    let CardList = this.state.cardGenerateList.slice(0).reverse().map((item,key) => {
+      return <Column size="is2" style={style} key={key}>
+        <Image src={item.src} alt="Card" style={{ marginBottom: '5px' }} ration="is4By3" className="App-cardThumbs" />
+      </Column>
+    }, this)
     return (
       <div className="App">
         <Hero size="isFullheight">
@@ -119,7 +186,7 @@ class App extends Component {
                   <Webcam audio={false} width="240" height="180" className="webcam" />
                   <video className="webcam" id="video" width={this.state.imageSize.width} style={{visibility:"hidden"}} height={this.state.imageSize.height} preload autoPlay loop muted></video>
                   <canvas ref="tempVideo" width={this.state.imageSize.width} style={{display:"none"}} height={this.state.imageSize.height}/>
-                  <img src={template} onLoad={this.onImgLoad} ref="template" style={{display:"none"}} width={this.state.imageSize.width} height={this.state.imageSize.height} alt=""/>
+                  <img src={this.state.currentCardData} onLoad={this.onImgLoad.bind(this)} ref="template" style={{visibility:"hidden",position: "fixed",left:0,top:0}}/>
                   { FaceList }
                   <div>Max:{JSON.stringify(this.state.current)}</div>
                 </Column>
@@ -127,13 +194,13 @@ class App extends Component {
                   <Hero>
                     <HeroBody>
                       <Container>
-                        <canvas className="App-card" ref="canvas" width={this.state.cardSize.width} height={this.state.cardSize.height} style={{ marginBottom: '5px' }}></canvas>
+                        <canvas className="App-card" ref="cardTemplate" width={this.state.cardSize.width} height={this.state.cardSize.height} style={{ marginBottom: '5px' }}></canvas>
                       </Container>
                     </HeroBody>
                   </Hero>
                 </Column>
                 <Column size="is12" style={style}>
-                  <Button icon="fa fa-camera" buttonStyle="isOutlined" color="isDanger">ถ่ายรูป</Button>
+                  <Button icon="fa fa-camera" buttonStyle="isOutlined" color="isDanger" onClick={this.capture.bind(this)}>ถ่ายรูป</Button>
                 </Column>
               </Columns>
               <Columns>
@@ -143,24 +210,7 @@ class App extends Component {
                       <Subtitle size="is3" style={webfont}>รายการบัตรล่าสุด</Subtitle>
                     </LevelLeft>
                     <Columns>
-                      <Column size="is2" style={style}>
-                        <Image src="assets/img/card.png" alt="Card" style={{ marginBottom: '5px' }} ration="is4By3" className="App-cardThumbs" />
-                      </Column>
-                      <Column size="is2" style={style}>
-                        <Image src="assets/img/card.png" alt="Card" style={{ marginBottom: '5px' }} ration="is4By3" className="App-cardThumbs" />
-                      </Column>
-                      <Column size="is2" style={style}>
-                        <Image src="assets/img/card.png" alt="Card" style={{ marginBottom: '5px' }} ration="is4By3" className="App-cardThumbs" />
-                      </Column>
-                      <Column size="is2" style={style}>
-                        <Image src="assets/img/card.png" alt="Card" style={{ marginBottom: '5px' }} ration="is4By3" className="App-cardThumbs" />
-                      </Column>
-                      <Column size="is2" style={style}>
-                        <Image src="assets/img/card.png" alt="Card" style={{ marginBottom: '5px' }} ration="is4By3" className="App-cardThumbs" />
-                      </Column>
-                      <Column size="is2" style={style}>
-                        <Image src="assets/img/card.png" alt="Card" style={{ marginBottom: '5px' }} ration="is4By3" className="App-cardThumbs" />
-                      </Column>
+                    { CardList }
                     </Columns>
                   </Box>
                 </Column>
@@ -182,5 +232,4 @@ class App extends Component {
     )
   }
 }
-
 export default keydown(App)
