@@ -6,6 +6,7 @@ import mascot from './img/mascot.svg'
 import brand from './img/textOnly.svg'
 import cardUdon from './template/udon.png'
 import cardUbon from './template/ubon.jpg'
+import cardSaat from './template/SAAT.png'
 import 'tracking';
 import './data/face.js';
 import './App.css'
@@ -19,6 +20,12 @@ class App extends Component {
     this.state = {
       index: 0,
       cardData: [
+        {
+          name: 'ส.บ.ม.ท.',
+          src: cardSaat,
+          captureSize: { width: 115, height: (115 / 3) * 4 },
+          capturePosition:  { x: 12, y: 67 },
+        },
         {
           name: 'โรงเรียนอุบล',
           src: cardUbon,
@@ -49,14 +56,15 @@ class App extends Component {
         height:1,
       },
       cardSize: {
-        width:400,
-        height:251,
+        width:800,
+        height:451,
       },
-      captureSize: { width: 98, height: (98 / 3) * 4 },
-      capturePosition:  { x: 15, y: 83 },
+      captureSize: { width: 0, height: 0 },
+      capturePosition:  { x: 0, y: 0 },
     };
   }
   componentDidMount() {
+    this.setCard(0);
     var self = this;
     var video = document.getElementById('video');
     var tracker = new window.tracking.ObjectTracker(['face']);
@@ -109,18 +117,37 @@ class App extends Component {
       this.handlePreviusCard()
     }
   }
+  setCard(index) {
+    let rawWidth = 400;
+    let rawHeight = 251;
+    let cardWidthRatio = this.state.cardSize.width / rawWidth;
+    let cardHeightRatio = this.state.cardSize.height / rawHeight;
+    let tempwidth = this.state.cardData[index].captureSize.width * cardWidthRatio;
+    let tempheight = this.state.cardData[index].captureSize.height * cardHeightRatio;
+    let tempX = this.state.cardData[index].capturePosition.x * cardWidthRatio;
+    let tempY = this.state.cardData[index].capturePosition.y * cardHeightRatio;
+    let captureSize = {
+      width:tempwidth,
+      height:tempheight,
+    }
+    let capturePosition = {
+      x: tempX,
+      y: tempY,
+    }
+    this.setState({
+      index: index,
+      currentCardData: this.state.cardData[index].src,
+      captureSize: captureSize,
+      capturePosition: capturePosition,
+    })
+  }
   handleNextCard() {
     let index = this.state.index;
     index++;
     if (index >= this.state.cardData.length) {
       index = 0;
     }
-    this.setState({
-      index: index,
-      currentCardData: this.state.cardData[index].src,
-      captureSize: this.state.cardData[index].captureSize,
-      capturePosition: this.state.cardData[index].capturePosition,
-    })
+    this.setCard(index);
   }
   handlePreviusCard() {
     let index = this.state.index;
@@ -128,12 +155,7 @@ class App extends Component {
     if (index < 0) {
       index = this.state.cardData.length - 1;
     }
-    this.setState({
-      index: index,
-      currentCardData: this.state.cardData[index].src,
-      captureSize: this.state.cardData[index].captureSize,
-      capturePosition: this.state.cardData[index].capturePosition,
-    })
+    this.setCard(index);
   }
   capture() {
     let cardGenerateList = this.state.cardGenerateList;
