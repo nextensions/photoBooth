@@ -7,6 +7,7 @@ import brand from './img/textOnly.svg'
 import cardUdon from './template/udon.png'
 import cardUbon from './template/ubon.jpg'
 import cardSaat from './template/SAAT.png'
+import 'whatwg-fetch';
 import 'tracking';
 import './data/face.js';
 import './App.css'
@@ -51,13 +52,13 @@ class App extends Component {
         width:320,
         height:240,
       },
-      cardDataSize: {
+      cardTeamplteSize: {
         width:1,
         height:1,
       },
       cardSize: {
-        width:800,
-        height:451,
+        width:400,
+        height:251,
       },
       captureSize: { width: 0, height: 0 },
       capturePosition:  { x: 0, y: 0 },
@@ -89,7 +90,7 @@ class App extends Component {
     let context = this.refs.cardTemplate.getContext('2d');
     context.clearRect(0, 0, this.state.cardSize.width, this.state.cardSize.height);
     // Add Card
-    context.drawImage(this.refs.template, 0, 0, this.state.cardDataSize.width, this.state.cardDataSize.height, 0, 0, this.state.cardSize.width, this.state.cardSize.height);
+    context.drawImage(this.refs.template, 0, 0, this.state.cardTeamplteSize.width, this.state.cardTeamplteSize.height, 0, 0, this.state.cardSize.width, this.state.cardSize.height);
     // Add Background
     context.beginPath();
     context.rect(this.state.capturePosition.x, this.state.capturePosition.y, this.state.captureSize.width, this.state.captureSize.height);
@@ -116,6 +117,22 @@ class App extends Component {
     } else if (keydown.event && keydown.event.which === 37) {
       this.handlePreviusCard()
     }
+  }
+  dataURItoBlob(dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ia], {type:mimeString});
   }
   setCard(index) {
     let rawWidth = 400;
@@ -161,13 +178,22 @@ class App extends Component {
     let cardGenerateList = this.state.cardGenerateList;
     cardGenerateList.push({
       canvas:this.refs.cardTemplate,
-      src:this.refs.cardTemplate.toDataURL('image/png')
+      src:this.refs.cardTemplate.toDataURL('image/jpeg')
     });
+    var data = new FormData()
+    var blob = this.dataURItoBlob(this.refs.cardTemplate.toDataURL('image/jpeg'));
+    data.append('name', 'ทดสอบๆ')
+    data.append('lastname', 'นาม')
+    data.append('file', blob)
+    fetch('http://localhost:3030/upload', {
+      method: 'POST',
+      body: data
+    })
     this.setState({cardGenerateList:cardGenerateList});
   }
   onImgLoad({target:img}) {
     this.setState({
-      cardDataSize:{
+      cardTeamplteSize:{
         width:img.offsetWidth,
         height:img.offsetHeight,
       }
@@ -216,6 +242,7 @@ class App extends Component {
                   <Hero>
                     <HeroBody>
                       <Container>
+                        <span style={ webfont }>นายสุทิน</span>
                         <canvas className="App-card" ref="cardTemplate" width={this.state.cardSize.width} height={this.state.cardSize.height} style={{ marginBottom: '5px' }}></canvas>
                       </Container>
                     </HeroBody>
@@ -247,7 +274,6 @@ class App extends Component {
                 </p>
               </Content>
             </Container>
-
           </HeroFoot>
         </Hero>
       </div>
