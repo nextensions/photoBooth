@@ -1,7 +1,7 @@
 import React from 'react'
-import mascot from './img/mascot.svg'
-import brand from './img/textOnly.svg'
-import './Menu.css'
+import mascot from '../../img/mascot.svg'
+import brand from '../../img/textOnly.svg'
+import './styles.css'
 
 const BurgerMenu = require('react-burger-menu').elastic
 

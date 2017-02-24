@@ -1,16 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 import { Container, Content, Hero, HeroBody, HeroFoot, Title, Subtitle, Icon, Image, Columns, Column, Box, LevelLeft, Section, Button, Heading } from 're-bulma'
-import Webcam from 'react-webcam'
 
+import Dimensions from './components/Dimensions'
+import Webcam from './components/Webcam'
+import RecentCardList from './components/RecentCardList'
+import Menu from './components/Menu/'
 import mascot from './img/mascot.svg'
 import brand from './img/textOnly.svg'
-import Menu from './Menu'
-import RecentCardList from './RecentCardList'
 import './App.css'
-
-const style = { padding: '10px' }
-const webfont = { fontFamily: 'THSarabunNewBold', fontWeight: 'normal', letterSpacing: -1 }
-const title = { fontFamily: 'THSarabunNewBold', fontWeight: 'normal', letterSpacing: -1, fontSize: '85px' }
+import { defaultStyle, styleForMacbook, style, webfont, macbookWidth } from './config/style'
 
 class App extends Component {
   constructor(props) {
@@ -18,17 +16,32 @@ class App extends Component {
 
     this.state = {
       cards: [
-        { imgPath: 'assets/img/card.png' },
-        { imgPath: 'assets/img/card.png' },
-        { imgPath: 'assets/img/card.png' },
-        { imgPath: 'assets/img/card.png' },
-        { imgPath: 'assets/img/card.png' },
-        { imgPath: 'assets/img/card.png' },
+        { imgPath: 'assets/img/card_saat.png' },
+        { imgPath: 'assets/img/card_saat.png' },
+        { imgPath: 'assets/img/card_saat.png' },
+        { imgPath: 'assets/img/card_saat.png' },
+        { imgPath: 'assets/img/card_saat.png' },
+        { imgPath: 'assets/img/card_saat.png' },
       ],
     }
   }
 
   render() {
+    if (this.props.containerWidth === macbookWidth) {
+      defaultStyle.cameraSize = styleForMacbook.cameraSize
+      defaultStyle.cameraPosition = styleForMacbook.cameraPosition
+      defaultStyle.headerStyle = { display: 'none' }
+      defaultStyle.cardMarginTop = styleForMacbook.cardMarginTop
+      defaultStyle.mascotHeight = styleForMacbook.mascotHeight
+      defaultStyle.brandWidth = styleForMacbook.brandWidth
+    }
+
+    const webcamStyle = {
+      position: 'absolute',
+      top: defaultStyle.cameraPosition.top,
+      left: defaultStyle.cameraPosition.left,
+    }
+
     return (
       <div className="App" id="page-wrap">
         <Menu />
@@ -36,28 +49,28 @@ class App extends Component {
           <Section className="App-heroSection" style={{ padding: '20px' }}>
             <Container isFluid>
               <Heading>
-                <img src={mascot} alt="Logo" className="App-logo" /> <br />
-                <img src={brand} alt="NextSchool" className="App-brand" />
+                <img src={mascot} alt="Mascot" className="App-logo" style={{ height: defaultStyle.mascotHeight }} /> <br />
+                <img src={brand} alt="NextSchool" className="App-brand" style={{ width: defaultStyle.brandWidth }} />
               </Heading>
             </Container>
           </Section>
-          <HeroBody>
+          <HeroBody style={{ padding: '40px 20px 0' }}>
             <Container hasTextCentered isFluid>
-              <Columns>
+              <Columns style={defaultStyle.headerStyle}>
                 <Column size="is12" style={style}>
-                  <Title size="is1" style={title}>ถ่ายรูปทำบัตรด่วน!</Title>
+                  <Title size="is1" style={defaultStyle.headerStyle}>ถ่ายรูปทำบัตรด่วน!</Title>
                 </Column>
               </Columns>
               <Columns isMultiline>
                 <Column size="is6" style={style}>
                   <Image src="assets/img/camera.png" alt="Camera" className="App-camera" style={{ marginBottom: '5px', zIndex: 10 }} />
-                  <Webcam audio={false} width="480" height="360" className="webcam" />
+                  <Webcam audio={false} width={defaultStyle.cameraSize.width} height={defaultStyle.cameraSize.height} className="webcam" style={webcamStyle} />
                 </Column>
                 <Column size="is6" style={style} is-fullheight>
                   <Hero>
-                    <HeroBody>
+                    <HeroBody style={{ padding: '40px 20px 0' }}>
                       <Container>
-                        <Image src="assets/img/card.png" alt="Card" style={{ marginBottom: '5px' }} ration="is4By3" className="App-card" />
+                        <Image src="assets/img/card_saat.png" alt="Card" style={{ marginTop: defaultStyle.cardMarginTop, marginBottom: '5px' }} ration="is4By3" className="App-card" />
                       </Container>
                     </HeroBody>
                   </Hero>
@@ -93,7 +106,8 @@ class App extends Component {
   }
 }
 
-RecentCardList.propTypes = {
-  cards: PropTypes.arrayOf(React.PropTypes.object),
+App.propTypes = {
+  containerWidth: PropTypes.number,
 }
-export default App
+
+export default Dimensions()(App)

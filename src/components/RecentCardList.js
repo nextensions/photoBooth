@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import { Columns, Column } from 're-bulma'
 import ImageZoom from 'react-medium-image-zoom'
-import './App.css'
 
 const style = { padding: '10px' }
 
