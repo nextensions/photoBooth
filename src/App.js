@@ -71,6 +71,8 @@ class App extends Component {
       captureSize: { width: 0, height: 0 },
       capturePosition: { x: 0, y: 0 },
     }
+    this.capture = this.capture.bind(this)
+    this.onImgLoad = this.onImgLoad.bind(this)
   }
   componentDidMount() {
     this.setCard(0)
@@ -86,7 +88,7 @@ class App extends Component {
         self.setState({ faceList: event.data })
         const max = event.data.reduce((a, b) => (a.width > b.width ? a : b))
         self.setState({ current: max })
-        const context = self.refs.tempVideo.getContext('2d')
+        const context = self.elementTempVideo.getContext('2d')
         context.clearRect(0, 0, self.state.imageSize.width, self.state.imageSize.height)
         context.drawImage(video,
           0,
@@ -101,18 +103,27 @@ class App extends Component {
       }
     })
   }
+  componentWillReceiveProps({ keydown }) {
+    if (keydown.event && keydown.event.which === 13) {
+      this.capture()
+    } else if (keydown.event && keydown.event.which === 39) {
+      this.handleNextCard()
+    } else if (keydown.event && keydown.event.which === 37) {
+      this.handlePreviusCard()
+    }
+  }
   componentDidUpdate() {
-    const context = this.refs.cardTemplate.getContext('2d')
+    const context = this.elementCardTemplate.getContext('2d')
     context.clearRect(0, 0, this.state.cardSize.width, this.state.cardSize.height)
     // Add Card
-    context.drawImage(this.refs.template, 0, 0, this.state.cardTeamplteSize.width, this.state.cardTeamplteSize.height, 0, 0, this.state.cardSize.width, this.state.cardSize.height)
+    context.drawImage(this.elementRawTemplate, 0, 0, this.state.cardTeamplteSize.width, this.state.cardTeamplteSize.height, 0, 0, this.state.cardSize.width, this.state.cardSize.height)
     // Add Background
     context.beginPath()
     context.rect(this.state.capturePosition.x, this.state.capturePosition.y, this.state.captureSize.width, this.state.captureSize.height)
     context.fillStyle = 'white'
     context.fill()
     context.drawImage(
-      this.refs.tempVideo,
+      this.elementTempVideo,
       this.state.current.x - ((this.state.current.width * 20) / 100),
       this.state.current.y - ((this.state.current.width * 30) / 100),
       this.state.current.width + ((this.state.current.width * 40) / 100),
@@ -122,15 +133,6 @@ class App extends Component {
       this.state.captureSize.width,
       this.state.captureSize.height
     )
-  }
-  componentWillReceiveProps({ keydown }) {
-    if (keydown.event && keydown.event.which === 13) {
-      this.capture()
-    } else if (keydown.event && keydown.event.which === 39) {
-      this.handleNextCard()
-    } else if (keydown.event && keydown.event.which === 37) {
-      this.handlePreviusCard()
-    }
   }
   onImgLoad({ target: img }) {
     this.setState({
@@ -197,11 +199,11 @@ class App extends Component {
   capture() {
     const cardGenerateList = this.state.cardGenerateList
     cardGenerateList.unshift({
-      canvas: this.refs.cardTemplate,
-      imgPath: this.refs.cardTemplate.toDataURL('image/jpeg'),
+      canvas: this.elementCardTemplate,
+      imgPath: this.elementCardTemplate.toDataURL('image/jpeg'),
     })
     const data = new FormData()
-    const blob = this.dataURItoBlob(this.refs.cardTemplate.toDataURL('image/jpeg'))
+    const blob = this.dataURItoBlob(this.elementCardTemplate.toDataURL('image/jpeg'))
     data.append('name', 'ทดสอบๆ')
     data.append('lastname', 'นาม')
     data.append('file', blob)
@@ -255,22 +257,21 @@ class App extends Component {
                   <Image src={imgCamera} alt="Camera" className="App-camera" style={{ marginBottom: '5px', zIndex: 10 }} />
                   <Webcam audio={false} width={defaultStyle.cameraSize.width} height={defaultStyle.cameraSize.height} className="webcam" style={webcamStyle} />
                   <video className="webcam" id="video" width={this.state.imageSize.width} style={{ visibility: 'hidden', position: 'fixed' }} height={this.state.imageSize.height} preload autoPlay loop muted />
-                  <canvas ref="tempVideo" width={this.state.imageSize.width} style={{ display: 'none' }} height={this.state.imageSize.height} />
-                  <img src={this.state.currentCardData} onLoad={this.onImgLoad.bind(this)} ref="template" style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} alt=""/>
+                  <canvas ref={(element) => { this.elementTempVideo = element }} width={this.state.imageSize.width} style={{ display: 'none' }} height={this.state.imageSize.height} />
+                  <img src={this.state.currentCardData} onLoad={this.onImgLoad} ref={(element) => { this.elementRawTemplate = element }} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} alt=""/>
                   { FaceList }
                 </Column>
                 <Column size="is6" style={style} is-fullheight>
                   <Hero>
                     <HeroBody style={{ padding: '40px 20px 0' }}>
                       <Container>
-                        { /* <Image src="assets/img/card_saat.png" alt="Card" style={{ marginTop: defaultStyle.cardMarginTop, marginBottom: '5px' }} ration="is4By3" className="App-card" /> */ }
-                        <canvas className="App-card" ref="cardTemplate" width={this.state.cardSize.width} height={this.state.cardSize.height} style={{ marginTop: defaultStyle.cardMarginTop, marginBottom: '5px' }} />
+                        <canvas className="App-card" ref={(element) => { this.elementCardTemplate = element }} width={this.state.cardSize.width} height={this.state.cardSize.height} style={{ marginTop: defaultStyle.cardMarginTop, marginBottom: '5px' }} />
                       </Container>
                     </HeroBody>
                   </Hero>
                 </Column>
                 <Column size="is12" style={style}>
-                  <Button icon="fa fa-camera" buttonStyle="isOutlined" color="isDanger" onClick={this.capture.bind(this)}>ถ่ายรูป</Button>
+                  <Button icon="fa fa-camera" buttonStyle="isOutlined" color="isDanger" onClick={this.capture}>ถ่ายรูป</Button>
                 </Column>
               </Columns>
               <Columns>
