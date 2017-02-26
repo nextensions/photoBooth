@@ -60,17 +60,17 @@ class App extends Component {
         width: 1,
         height: 1,
       },
+      // cardSize: {
+      //   width: 400,
+      //   height: 251,
+      // },
       cardSize: {
-        width: 400,
-        height: 251,
+        width: 952,
+        height: 597,
       },
       captureSize: { width: 0, height: 0 },
       capturePosition: { x: 0, y: 0 },
     }
-    // cardSize: {
-    //   width: 952,
-    //   height: 597,
-    // },
   }
   componentDidMount() {
     this.setCard(0)
@@ -196,7 +196,7 @@ class App extends Component {
   }
   capture() {
     const cardGenerateList = this.state.cardGenerateList
-    cardGenerateList.push({
+    cardGenerateList.unshift({
       canvas: this.refs.cardTemplate,
       imgPath: this.refs.cardTemplate.toDataURL('image/jpeg'),
     })
