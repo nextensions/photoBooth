@@ -49,5 +49,6 @@
     "eol-last": "off",
     "no-use-before-define": "off",
     "import/no-extraneous-dependencies": "off",
+    "max-len": [2, 500, 4, {"ignoreUrls": true}]
   }
 }

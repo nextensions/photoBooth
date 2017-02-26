@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { Container, Content, Hero, HeroBody, HeroFoot, Title, Subtitle, Icon, Image, Columns, Column, Box, LevelLeft, Section, Button, Heading } from 're-bulma'
-import ReactKeydown from 'react-keydown'
+import reactKeydown from 'react-keydown'
 import 'whatwg-fetch'
 import 'tracking'
 
-import Dimensions from './components/Dimensions'
+import dimensions from './components/Dimensions'
 import Webcam from './components/Webcam'
 import RecentCardList from './components/RecentCardList'
 import Menu from './components/Menu/'
@@ -258,14 +258,20 @@ class App extends Component {
                   <Webcam audio={false} width={defaultStyle.cameraSize.width} height={defaultStyle.cameraSize.height} className="webcam" style={webcamStyle} />
                   <video className="webcam" id="video" width={this.state.imageSize.width} style={{ visibility: 'hidden', position: 'fixed' }} height={this.state.imageSize.height} preload autoPlay loop muted />
                   <canvas ref={(element) => { this.elementTempVideo = element }} width={this.state.imageSize.width} style={{ display: 'none' }} height={this.state.imageSize.height} />
-                  <img src={this.state.currentCardData} onLoad={this.onImgLoad} ref={(element) => { this.elementRawTemplate = element }} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} alt=""/>
+                  <img src={this.state.currentCardData} onLoad={this.onImgLoad} ref={(element) => { this.elementRawTemplate = element }} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} alt="" />
                   { FaceList }
                 </Column>
                 <Column size="is6" style={style} is-fullheight>
                   <Hero>
                     <HeroBody style={{ padding: '40px 20px 0' }}>
                       <Container>
-                        <canvas className="App-card" ref={(element) => { this.elementCardTemplate = element }} width={this.state.cardSize.width} height={this.state.cardSize.height} style={{ marginTop: defaultStyle.cardMarginTop, marginBottom: '5px' }} />
+                        <canvas
+                          className="App-card"
+                          ref={(element) => { this.elementCardTemplate = element }}
+                          width={this.state.cardSize.width}
+                          height={this.state.cardSize.height}
+                          style={{ marginTop: defaultStyle.cardMarginTop, marginBottom: '5px' }}
+                        />
                       </Container>
                     </HeroBody>
                   </Hero>
@@ -305,4 +311,4 @@ App.propTypes = {
   containerWidth: PropTypes.number,
 }
 
-export default ReactKeydown(Dimensions()(App))
+export default reactKeydown(dimensions()(App))
