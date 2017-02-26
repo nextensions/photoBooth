@@ -24,7 +24,7 @@ class App extends Component {
     super()
     this.state = {
       index: 0,
-      cardData: [
+      cardTemplateList: [
         {
           name: 'ส.บ.ม.ท.',
           src: cardSaat,
@@ -44,8 +44,8 @@ class App extends Component {
           capturePosition: { x: 17, y: 86 },
         },
       ],
-      currentCardData: cardUbon,
-      faceList: [],
+      currentCardTemplate: cardUbon,
+      faceDetectList: [],
       cardGenerateList: [],
       current: {},
       videoSize: {
@@ -56,7 +56,7 @@ class App extends Component {
         width: 320,
         height: 240,
       },
-      cardTeamplteSize: {
+      cardTeamplateSize: {
         width: 1,
         height: 1,
       },
@@ -75,9 +75,9 @@ class App extends Component {
     this.onImgLoad = this.onImgLoad.bind(this)
   }
   componentDidMount() {
-    this.setCard(0)
+    this.setCardTemplate(0)
     const self = this
-    const video = document.getElementById('video')
+    const video = this.elementVideo
     const tracker = new window.tracking.ObjectTracker(['face'])
     tracker.setInitialScale(4)
     tracker.setStepSize(2)
@@ -85,30 +85,24 @@ class App extends Component {
     window.tracking.track(video, tracker, { camera: true })
     tracker.on('track', (event) => {
       if (event.data.length !== 0) {
-        self.setState({ faceList: event.data })
+        self.setState({ faceDetectList: event.data })
         const max = event.data.reduce((a, b) => (a.width > b.width ? a : b))
         self.setState({ current: max })
         const context = self.elementTempVideo.getContext('2d')
         context.clearRect(0, 0, self.state.imageSize.width, self.state.imageSize.height)
-        context.drawImage(video,
-          0,
-          0,
-          self.state.videoSize.width,
-          self.state.videoSize.height,
-          0,
-          0,
-          self.state.imageSize.width,
-          self.state.imageSize.height
-        )
+        context.drawImage(video, 0, 0, self.state.videoSize.width, self.state.videoSize.height, 0, 0, self.state.imageSize.width, self.state.imageSize.height)
       }
     })
   }
   componentWillReceiveProps({ keydown }) {
     if (keydown.event && keydown.event.which === 13) {
+      // Enter key
       this.capture()
     } else if (keydown.event && keydown.event.which === 39) {
+      // Left key
       this.handleNextCard()
     } else if (keydown.event && keydown.event.which === 37) {
+      // Right key
       this.handlePreviusCard()
     }
   }
@@ -116,7 +110,7 @@ class App extends Component {
     const context = this.elementCardTemplate.getContext('2d')
     context.clearRect(0, 0, this.state.cardSize.width, this.state.cardSize.height)
     // Add Card
-    context.drawImage(this.elementRawTemplate, 0, 0, this.state.cardTeamplteSize.width, this.state.cardTeamplteSize.height, 0, 0, this.state.cardSize.width, this.state.cardSize.height)
+    context.drawImage(this.elementRawTemplate, 0, 0, this.state.cardTeamplateSize.width, this.state.cardTeamplateSize.height, 0, 0, this.state.cardSize.width, this.state.cardSize.height)
     // Add Background
     context.beginPath()
     context.rect(this.state.capturePosition.x, this.state.capturePosition.y, this.state.captureSize.width, this.state.captureSize.height)
@@ -136,21 +130,21 @@ class App extends Component {
   }
   onImgLoad({ target: img }) {
     this.setState({
-      cardTeamplteSize: {
+      cardTeamplateSize: {
         width: img.offsetWidth,
         height: img.offsetHeight,
       },
     })
   }
-  setCard(index) {
+  setCardTemplate(index) {
     const rawWidth = 400
     const rawHeight = 251
     const cardWidthRatio = this.state.cardSize.width / rawWidth
     const cardHeightRatio = this.state.cardSize.height / rawHeight
-    const tempwidth = this.state.cardData[index].captureSize.width * cardWidthRatio
-    const tempheight = this.state.cardData[index].captureSize.height * cardHeightRatio
-    const tempX = this.state.cardData[index].capturePosition.x * cardWidthRatio
-    const tempY = this.state.cardData[index].capturePosition.y * cardHeightRatio
+    const tempwidth = this.state.cardTemplateList[index].captureSize.width * cardWidthRatio
+    const tempheight = this.state.cardTemplateList[index].captureSize.height * cardHeightRatio
+    const tempX = this.state.cardTemplateList[index].capturePosition.x * cardWidthRatio
+    const tempY = this.state.cardTemplateList[index].capturePosition.y * cardHeightRatio
     const captureSize = {
       width: tempwidth,
       height: tempheight,
@@ -161,7 +155,7 @@ class App extends Component {
     }
     this.setState({
       index,
-      currentCardData: this.state.cardData[index].src,
+      currentCardTemplate: this.state.cardTemplateList[index].src,
       captureSize,
       capturePosition,
     })
@@ -183,43 +177,51 @@ class App extends Component {
   handleNextCard() {
     let index = this.state.index
     index += 1
-    if (index >= this.state.cardData.length) {
+    if (index >= this.state.cardTemplateList.length) {
       index = 0
     }
-    this.setCard(index)
+    this.setCardTemplate(index)
   }
   handlePreviusCard() {
     let index = this.state.index
     index -= 1
     if (index < 0) {
-      index = this.state.cardData.length - 1
+      index = this.state.cardTemplateList.length - 1
     }
-    this.setCard(index)
+    this.setCardTemplate(index)
   }
   capture() {
     const cardGenerateList = this.state.cardGenerateList
+    if (cardGenerateList.length >= 6) {
+      cardGenerateList.splice(5, 1) // delete card over length
+    }
     cardGenerateList.unshift({
+      date: new Date(),
+      name: 'ทดสอบชื่อ',
+      lastname: 'ทดสอบนามสกุล',
       canvas: this.elementCardTemplate,
       imgPath: this.elementCardTemplate.toDataURL('image/jpeg'),
+      blob: this.dataURItoBlob(this.elementCardTemplate.toDataURL('image/jpeg')),
     })
-    const data = new FormData()
-    const blob = this.dataURItoBlob(this.elementCardTemplate.toDataURL('image/jpeg'))
-    data.append('name', 'ทดสอบๆ')
-    data.append('lastname', 'นาม')
-    data.append('file', blob)
-    fetch('http://localhost:3030/upload', {
-      method: 'POST',
-      header: {
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: data,
-    })
+    this.sendData(cardGenerateList)
     this.setState({ cardGenerateList })
   }
+  sendData(params) {
+    const data = new FormData()
+    params.forEach((objectData) => {
+      Object.keys(objectData).forEach((key) => {
+        if (objectData && Object.prototype.hasOwnProperty.call(objectData, key)) {
+          data.append(key, objectData[key])
+        }
+      })
+    })
+    fetch('http://localhost:3030/upload', {
+      method: 'POST',
+      header: { 'Access-Control-Allow-Origin': '*' },
+      body: data,
+    })
+  }
   render() {
-    const FaceList = this.state.faceList.map((item, key) => (
-      <div key={key}>All:{JSON.stringify(item)}</div>
-    ))
     if (this.props.containerWidth === macbookWidth) {
       defaultStyle.cameraSize = styleForMacbook.cameraSize
       defaultStyle.cameraPosition = styleForMacbook.cameraPosition
@@ -256,10 +258,9 @@ class App extends Component {
                 <Column size="is6" style={style}>
                   <Image src={imgCamera} alt="Camera" className="App-camera" style={{ marginBottom: '5px', zIndex: 10 }} />
                   <Webcam audio={false} width={defaultStyle.cameraSize.width} height={defaultStyle.cameraSize.height} className="webcam" style={webcamStyle} />
-                  <video className="webcam" id="video" width={this.state.imageSize.width} style={{ visibility: 'hidden', position: 'fixed' }} height={this.state.imageSize.height} preload autoPlay loop muted />
+                  <video ref={(element) => { this.elementVideo = element }} width={this.state.imageSize.width} style={{ visibility: 'hidden', position: 'fixed' }} height={this.state.imageSize.height} preload autoPlay loop muted />
                   <canvas ref={(element) => { this.elementTempVideo = element }} width={this.state.imageSize.width} style={{ display: 'none' }} height={this.state.imageSize.height} />
-                  <img src={this.state.currentCardData} onLoad={this.onImgLoad} ref={(element) => { this.elementRawTemplate = element }} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} alt="" />
-                  { FaceList }
+                  <img src={this.state.currentCardTemplate} onLoad={this.onImgLoad} ref={(element) => { this.elementRawTemplate = element }} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} alt="" />
                 </Column>
                 <Column size="is6" style={style} is-fullheight>
                   <Hero>
