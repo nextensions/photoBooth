@@ -195,25 +195,26 @@ class App extends Component {
     if (cardGenerateList.length >= 6) {
       cardGenerateList.splice(5, 1) // delete card over length
     }
-    cardGenerateList.unshift({
+    const cardGenerate = {
       date: new Date(),
       name: 'ทดสอบชื่อ',
       lastname: 'ทดสอบนามสกุล',
       canvas: this.elementCardTemplate,
       imgPath: this.elementCardTemplate.toDataURL('image/jpeg'),
       blob: this.dataURItoBlob(this.elementCardTemplate.toDataURL('image/jpeg')),
-    })
-    this.sendData(cardGenerateList)
+    }
+    cardGenerateList.unshift(cardGenerate)
+    this.sendData(cardGenerate)
     this.setState({ cardGenerateList })
   }
-  sendData(params) {
+  sendData(objectData) {
     const data = new FormData()
-    params.forEach((objectData) => {
-      Object.keys(objectData).forEach((key) => {
-        if (objectData && Object.prototype.hasOwnProperty.call(objectData, key)) {
-          data.append(key, objectData[key])
-        }
-      })
+    const tempObjectData = objectData
+    delete tempObjectData.imgPath
+    Object.keys(tempObjectData).forEach((key) => {
+      if (tempObjectData && Object.prototype.hasOwnProperty.call(tempObjectData, key)) {
+        data.append(key, tempObjectData[key])
+      }
     })
     fetch('http://localhost:3030/upload', {
       method: 'POST',
