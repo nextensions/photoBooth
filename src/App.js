@@ -9,6 +9,7 @@ import dimensions from './components/Dimensions'
 import Webcam from './components/Webcam'
 import RecentCardList from './components/RecentCardList'
 import Menu from './components/Menu/'
+import SmartCard from './components/SmartCard'
 
 import mascot from './img/mascot.svg'
 import brand from './img/textOnly.svg'
@@ -283,6 +284,7 @@ class App extends Component {
                   <Button icon="fa fa-camera" buttonStyle="isOutlined" color="isDanger" onClick={this.capture}>ถ่ายรูป</Button>
                 </Column>
               </Columns>
+              <SmartCard />
               <Columns>
                 <Column size="is12" style={style}>
                   <Box>
