@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Container, Content, Hero, HeroBody, HeroFoot, Title, Subtitle, Icon, Image, Columns, Column, Box, LevelLeft, Section, Button, Heading } from 're-bulma'
 import reactKeydown from 'react-keydown'
+import clone from 'lodash.clonedeep'
 import 'whatwg-fetch'
 import 'tracking'
 
@@ -209,8 +210,8 @@ class App extends Component {
   }
   sendData(objectData) {
     const data = new FormData()
-    const tempObjectData = objectData
-    delete tempObjectData.imgPath
+    const tempObjectData = clone(objectData)
+    delete tempObjectData.imgPath // fixbug
     Object.keys(tempObjectData).forEach((key) => {
       if (tempObjectData && Object.prototype.hasOwnProperty.call(tempObjectData, key)) {
         data.append(key, tempObjectData[key])
