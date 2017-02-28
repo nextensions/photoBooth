@@ -40,12 +40,28 @@ const templateList = [
     src: cardUbon,
     captureSize: { width: 98, height: (98 / 3) * 4 },
     capturePosition: { x: 15, y: 83 },
+    personInfoPosition: {
+      nameTH: { x: 430, y: 242 },
+      nameEN: { x: 430, y: 305 },
+      citizenId: { x: 585, y: 368 },
+      memberId: { x: 475, y: 430 },
+      memberType: { x: 810, y: 430 },
+      issueDate: { x: 20, y: 20 },
+    },
   },
   {
     name: 'โรงเรียนอุดร',
     src: cardUdon,
     captureSize: { width: 90, height: 120 },
     capturePosition: { x: 17, y: 86 },
+    personInfoPosition: {
+      nameTH: { x: 430, y: 242 },
+      nameEN: { x: 430, y: 305 },
+      citizenId: { x: 585, y: 368 },
+      memberId: { x: 475, y: 430 },
+      memberType: { x: 810, y: 430 },
+      issueDate: { x: 20, y: 20 },
+    },
   },
 ]
 
@@ -83,6 +99,7 @@ class App extends Component {
         memberId: '',
         memberType: '',
       },
+      trackingTask: null,
     }
     this.capture = this.capture.bind(this)
     this.onImgLoad = this.onImgLoad.bind(this)
@@ -90,6 +107,7 @@ class App extends Component {
     this.clearPersonInfo = this.clearPersonInfo.bind(this)
     this.drawPersonInfo = this.drawPersonInfo.bind(this)
     this.drawCardTemplate = this.drawCardTemplate.bind(this)
+    this.setTrackingTask = this.setTrackingTask.bind(this)
   }
   componentDidMount() {
     this.setCardTemplate(0)
@@ -100,7 +118,7 @@ class App extends Component {
     tracker.setStepSize(2)
     // tracker.setEdgesDensity(0.01)
     tracker.setEdgesDensity(0.1)
-    window.tracking.track(video, tracker, { camera: true })
+    const trackingTask = window.tracking.track(video, tracker, { camera: true })
     tracker.on('track', (event) => {
       const contextShow = self.elementShowVideo.getContext('2d')
       contextShow.drawImage(video, 0, 0, this.state.videoSize.width, this.state.videoSize.height, 0, 0, self.elementShowVideo.width, self.elementShowVideo.height)
@@ -113,6 +131,8 @@ class App extends Component {
         this.drawCardTemplate()
       }
     })
+    this.setTrackingTask(trackingTask)
+    // this.state.trackingTask.stop() // If you wan't to stop tracking
   }
   componentWillReceiveProps({ keydown }) {
     if (keydown.event && keydown.event.which === 13) {
@@ -126,7 +146,6 @@ class App extends Component {
       this.handlePreviusCard()
     }
   }
-
   onImgLoad({ target: img }) {
     this.setState({
       cardTeamplateSize: {
@@ -135,6 +154,11 @@ class App extends Component {
       },
     }, () => {
       this.drawCardTemplate()
+    })
+  }
+  setTrackingTask(trackingTask) {
+    this.setState({
+      trackingTask,
     })
   }
   setCardTemplate(index) {
