@@ -1,5 +1,11 @@
 ## Environment
-Support browser ```firefox``` only
+- Support browser ```firefox``` only
+- Support smart card (Thai national ID card)
+- Support webcam
+- use tracking.js
+- use WebCard
+- use canvas
+- React
 
 ## Installation
 - Client
