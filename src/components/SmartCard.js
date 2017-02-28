@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 class SmartCard extends Component {
   constructor() {
@@ -30,7 +30,7 @@ class SmartCard extends Component {
         rdr.id = webcard.readers[i].name.replace(/\s/g, '').toLowerCase()
       }
     } catch (e) {
-    } finally {
+      console.log(e)
     }
   }
   cardPresent(reader) {
@@ -38,90 +38,88 @@ class SmartCard extends Component {
     setTimeout(() => that.initCard(reader), 10)
   }
   cardRemoved(reader) {
+    this.props.clearPersonInfo()
+    console.log(reader)
+    // if card remove
   }
   hex2string(hexx) {
-    if (hexx.length > 4) hexx = hexx.slice(0, -4);
-    var hex = hexx.toString(); //force conversion
-    var str = '';
-    var tmp = '';
-    var patt = /^[a-zA-Z0-9&@.$%\-,():;`# \/]+$/;
-    for (var i = 0; i < hex.length; i += 2) {
-      tmp = String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-      if (tmp.match(patt)) {} else {
-        tmp = String.fromCharCode(parseInt(hex.substr(i, 2), 16) + 3424);
+    let tempHexx = hexx
+    if (tempHexx.length > 4) tempHexx = tempHexx.slice(0, -4)
+    const patt = /^[a-zA-Z0-9&@.$%\-,():`# \/]+$/
+    const hex = tempHexx.toString()
+    let str = ''
+    let tmp = ''
+    for (let i = 0; i < hex.length; i += 2) {
+      tmp = String.fromCharCode(parseInt(hex.substr(i, 2), 16))
+      if (!tmp.match(patt)) {
+        tmp = String.fromCharCode(parseInt(hex.substr(i, 2), 16) + 3424)
       }
-      str += tmp;
+      str += tmp
     }
-
-    str = str.replace(/#/g, ' ');
-
-    return str;
+    str = str.replace(/#/g, ' ')
+    return str
   }
   initCard(reader) {
-    let tmp = '';
-      reader.connect(1); // 1-Exclusive, 2-Shared
-      console.log('ATR : ' + reader.atr);
-      var cmd_select = '00A4040008A000000054480001'; // select before everything, don't remove
-      reader.transcieve(cmd_select);
+    const person = {}
+    let apdu
+    let resp
+    let tmp = ''
+    reader.connect(1) // 1-Exclusive, 2-Shared
+    console.log('ATR : ' + reader.atr)
+    apdu = '00A4040008A000000054480001' // select before everything, don't remove
+    reader.transcieve(apdu)
 
-      // Citizen ID
-      var apdu = '80B0000402000D';
-      var resp = reader.transcieve(apdu);
-      var citizen_id = this.hex2string(resp);
-      console.log('CID : ' + citizen_id);
+    // Citizen ID
+    apdu = '80B0000402000D'
+    resp = reader.transcieve(apdu)
+    person.citizenId = this.hex2string(resp)
 
+    // Person Info
+    apdu = '80B000110200D1'
+    resp = reader.transcieve(apdu)
+    tmp = this.hex2string(resp)
+    tmp = tmp.split(' ') // split data info
+    tmp = tmp.filter(v => v !== '') // filter null
+    person.titleTH = tmp[0]
+    person.firstnameTH = tmp[1]
+    person.lastnameTH = tmp[2]
+    person.titleEN = tmp[3]
+    person.firstnameEN = tmp[4]
+    person.lastnameEN = tmp[5]
+    person.dob = tmp[6].slice(0, -1)
+    person.gender = tmp[6].slice(-1)
 
-      // Person Info
-      apdu = '80B000110200D1';
-      resp = reader.transcieve(apdu);
-      var info = this.hex2string(resp);
-      console.log('INFO : ' + info);
-      tmp = info.split(' '); // split data info
-      var person = {};
-      tmp = tmp.filter(v => v !== ''); // filter null
-      person.title_th = tmp[0];
-      person.firstname_th = tmp[1];
-      person.lastname_th = tmp[2];
-      person.title_en = tmp[3];
-      person.firstname_en = tmp[4];
-      person.lastname_en = tmp[5];
-      person.dob = tmp[6].slice(0, -1);
-      person.gender = tmp[6].slice(-1);
-      console.log(person)
-      // Cookies.set('data', person.firstname_th, { expires: 7 });
+    // Address
+    apdu = '80B01579020064'
+    resp = reader.transcieve(apdu)
+    tmp = this.hex2string(resp)
+    tmp = tmp.split(' ') // split data info
+    tmp = tmp.filter(v => v !== '') // filter null
 
-      // Address
-      apdu = '80B01579020064';
-      resp = reader.transcieve(apdu);
-      var address = this.hex2string(resp);
-      tmp = address.split(' '); // split data info
-      tmp = tmp.filter(v => v !== ''); // filter null
-      console.log('ADDRESS : ', tmp)
-
-      // ISSUE
-      apdu = '80B00167020012';
-      resp = reader.transcieve(apdu);
-      var issueAll = this.hex2string(resp);
-      console.log('ISSUE ALL : ', issueAll)
-      if (issueAll.length >= 16) {
-        var issue = issueAll.slice(0, 8);
-        var expire = issueAll.slice(8, 16);
-        console.log('ISSUE : ', issue)
-        console.log('EXPIRE : ', expire)
-      }
-
-
-      reader.disconnect();
-      }
-    render() {
+    // ISSUE
+    apdu = '80B00167020012'
+    resp = reader.transcieve(apdu)
+    tmp = this.hex2string(resp)
+    if (tmp.length >= 16) {
+      person.issueAll = tmp.slice(0, 8)
+      person.expire = tmp.slice(8, 16)
+    }
+    reader.disconnect()
+    this.props.setPersonInfo(person.firstnameTH, person.lastnameTH, person.firstnameEN, person.lastnameEN, person.citizenId)
+  }
+  render() {
     return (
       <div>
         <object id="webcard" type="application/x-webcard" width="0" height="0">
-            <param name="onload" value="pluginLoaded"/>
+          <param name="onload" value="pluginLoaded" />
         </object>
       </div>
     )
   }
 }
 
+SmartCard.propTypes = {
+  setPersonInfo: PropTypes.func.isRequired,
+  clearPersonInfo: PropTypes.func.isRequired,
+}
 export default SmartCard

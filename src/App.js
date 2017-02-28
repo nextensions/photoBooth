@@ -67,9 +67,18 @@ class App extends Component {
       },
       captureSize: { width: 0, height: 0 },
       capturePosition: { x: 0, y: 0 },
+      personInfo: {
+        firstnameTH: '',
+        lastnameTH: '',
+        firstnameEN: '',
+        lastnameEN: '',
+        citizenId: '',
+      },
     }
     this.capture = this.capture.bind(this)
     this.onImgLoad = this.onImgLoad.bind(this)
+    this.setPersonInfo = this.setPersonInfo.bind(this)
+    this.clearPersonInfo = this.clearPersonInfo.bind(this)
   }
 
   componentDidMount() {
@@ -159,6 +168,28 @@ class App extends Component {
       currentCardTemplate: this.state.cardTemplateList[index].src,
       captureSize,
       capturePosition,
+    })
+  }
+  setPersonInfo(firstnameTH, lastnameTH, firstnameEN, lastnameEN, citizenId) {
+    this.setState({
+      personInfo: {
+        firstnameTH,
+        lastnameTH,
+        firstnameEN,
+        lastnameEN,
+        citizenId,
+      },
+    })
+  }
+  clearPersonInfo() {
+    this.setState({
+      personInfo: {
+        firstnameTH: '',
+        lastnameTH: '',
+        firstnameEN: '',
+        lastnameEN: '',
+        citizenId: '',
+      },
     })
   }
   dataURItoBlob(dataURI) {
@@ -280,10 +311,11 @@ class App extends Component {
                   </Hero>
                 </Column>
                 <Column size="is12" style={style}>
+                  <SmartCard setPersonInfo={this.setPersonInfo} clearPersonInfo={this.clearPersonInfo} />
+                  { JSON.stringify(this.state.personInfo)}
                   <Button icon="fa fa-camera" buttonStyle="isOutlined" color="isDanger" onClick={this.capture}>ถ่ายรูป</Button>
                 </Column>
               </Columns>
-              <SmartCard />
               <Columns>
                 <Column size="is12" style={style}>
                   <Box>
