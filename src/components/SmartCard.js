@@ -37,9 +37,8 @@ class SmartCard extends Component {
     const that = this
     setTimeout(() => that.initCard(reader), 10)
   }
-  cardRemoved(reader) {
+  cardRemoved() {
     this.props.clearPersonInfo()
-    console.log(reader)
     // if card remove
   }
   hex2string(hexx) {
@@ -60,52 +59,57 @@ class SmartCard extends Component {
     return str
   }
   initCard(reader) {
-    const person = {}
-    let apdu
-    let resp
-    let tmp = ''
-    reader.connect(1) // 1-Exclusive, 2-Shared
-    console.log('ATR : ' + reader.atr)
-    apdu = '00A4040008A000000054480001' // select before everything, don't remove
-    reader.transcieve(apdu)
+    try {
+      const person = {}
+      let apdu
+      let resp
+      let tmp = ''
+      reader.connect(1) // 1-Exclusive, 2-Shared
+      apdu = '00A4040008A000000054480001' // select before everything, don't remove
+      reader.transcieve(apdu)
 
-    // Citizen ID
-    apdu = '80B0000402000D'
-    resp = reader.transcieve(apdu)
-    person.citizenId = this.hex2string(resp)
+      // Citizen ID
+      apdu = '80B0000402000D'
+      resp = reader.transcieve(apdu)
+      person.citizenId = this.hex2string(resp)
 
-    // Person Info
-    apdu = '80B000110200D1'
-    resp = reader.transcieve(apdu)
-    tmp = this.hex2string(resp)
-    tmp = tmp.split(' ') // split data info
-    tmp = tmp.filter(v => v !== '') // filter null
-    person.titleTH = tmp[0]
-    person.firstnameTH = tmp[1]
-    person.lastnameTH = tmp[2]
-    person.titleEN = tmp[3]
-    person.firstnameEN = tmp[4]
-    person.lastnameEN = tmp[5]
-    person.dob = tmp[6].slice(0, -1)
-    person.gender = tmp[6].slice(-1)
+      // Person Info
+      apdu = '80B000110200D1'
+      resp = reader.transcieve(apdu)
+      tmp = this.hex2string(resp)
+      tmp = tmp.split(' ') // split data info
+      tmp = tmp.filter(v => v !== '') // filter null
+      person.titleTH = tmp[0]
+      person.firstnameTH = tmp[1]
+      person.lastnameTH = tmp[2]
+      person.titleEN = tmp[3]
+      person.firstnameEN = tmp[4]
+      person.lastnameEN = tmp[5]
+      person.dob = tmp[6].slice(0, -1)
+      person.gender = tmp[6].slice(-1)
 
-    // Address
-    apdu = '80B01579020064'
-    resp = reader.transcieve(apdu)
-    tmp = this.hex2string(resp)
-    tmp = tmp.split(' ') // split data info
-    tmp = tmp.filter(v => v !== '') // filter null
+      // Address
+      apdu = '80B01579020064'
+      resp = reader.transcieve(apdu)
+      tmp = this.hex2string(resp)
+      tmp = tmp.split(' ') // split data info
+      tmp = tmp.filter(v => v !== '') // filter null
 
-    // ISSUE
-    apdu = '80B00167020012'
-    resp = reader.transcieve(apdu)
-    tmp = this.hex2string(resp)
-    if (tmp.length >= 16) {
-      person.issueAll = tmp.slice(0, 8)
-      person.expire = tmp.slice(8, 16)
+      // ISSUE
+      apdu = '80B00167020012'
+      resp = reader.transcieve(apdu)
+      tmp = this.hex2string(resp)
+      if (tmp.length >= 16) {
+        person.issueAll = tmp.slice(0, 8)
+        person.expire = tmp.slice(8, 16)
+      }
+      this.props.setPersonInfo(person.firstnameTH, person.lastnameTH, person.firstnameEN, person.lastnameEN, person.citizenId)
+    } catch (e) {
+      this.props.setPersonInfo('เสียบบัตรไม่แน่นกรุณาเสียบใหม่!!', '', 'เสียบบัตรไม่แน่นกรุณาเสียบใหม่!!', '', '')
+      console.log(e)
+    } finally {
+      reader.disconnect()
     }
-    reader.disconnect()
-    this.props.setPersonInfo(person.firstnameTH, person.lastnameTH, person.firstnameEN, person.lastnameEN, person.citizenId)
   }
   render() {
     return (
