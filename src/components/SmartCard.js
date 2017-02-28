@@ -58,6 +58,7 @@ class SmartCard extends Component {
     return str;
   }
   initCard(reader) {
+    let tmp = '';
       reader.connect(1); // 1-Exclusive, 2-Shared
       console.log('ATR : ' + reader.atr);
       var cmd_select = '00A4040008A000000054480001'; // select before everything, don't remove
@@ -75,9 +76,9 @@ class SmartCard extends Component {
       resp = reader.transcieve(apdu);
       var info = this.hex2string(resp);
       console.log('INFO : ' + info);
-      var tmp = info.split(' '); // split data info
+      tmp = info.split(' '); // split data info
       var person = {};
-      tmp = tmp.filter(v => v != ''); // filter null
+      tmp = tmp.filter(v => v !== ''); // filter null
       person.title_th = tmp[0];
       person.firstname_th = tmp[1];
       person.lastname_th = tmp[2];
@@ -93,11 +94,9 @@ class SmartCard extends Component {
       apdu = '80B01579020064';
       resp = reader.transcieve(apdu);
       var address = this.hex2string(resp);
-      var tmp = address.split(' '); // split data info
-      var address = {};
-      tmp = tmp.filter(v => v != ''); // filter null
-      console.log(tmp)
-      console.log('ADDRESS : ', address)
+      tmp = address.split(' '); // split data info
+      tmp = tmp.filter(v => v !== ''); // filter null
+      console.log('ADDRESS : ', tmp)
 
       // ISSUE
       apdu = '80B00167020012';
