@@ -5,15 +5,18 @@ import clone from 'lodash.clonedeep'
 import 'whatwg-fetch'
 import 'tracking'
 
+
 import dimensions from './components/Dimensions'
 import RecentCardList from './components/RecentCardList'
 import Menu from './components/Menu/'
 import SmartCard from './components/SmartCard'
+import Clock from './components/Clock'
 import cardTemplateList from './config/cardTemplate'
 import mascot from './img/mascot.svg'
 import brand from './img/textOnly.svg'
 import imgCamera from './img/camera.png'
-import './data/face.js'
+
+import './data/face-min.js'
 import './App.css'
 import { defaultStyle, styleForMacbook, style, webfont, macbookWidth } from './config/style'
 
@@ -96,6 +99,9 @@ class App extends Component {
       // Right key
       this.handlePreviusCard()
     }
+  }
+  componentWillUnmount() {
+    this.state.trackingTask.stop()
   }
   onImgLoad({ target: img }) {
     this.setState({
@@ -318,7 +324,7 @@ class App extends Component {
                 <Column size="is12" style={style}>
                   <Box>
                     <LevelLeft>
-                      <Subtitle size="is3" style={webfont}>รายการบัตรล่าสุด</Subtitle>
+                      <Subtitle size="is3" style={webfont}>รายการบัตรล่าสุด <Clock format="HH:mm:ss" /></Subtitle>
                     </LevelLeft>
                     <RecentCardList cards={this.state.cardGenerateList} />
                   </Box>

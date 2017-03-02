@@ -30,7 +30,7 @@ class SmartCard extends Component {
         rdr.id = webcard.readers[i].name.replace(/\s/g, '').toLowerCase()
       }
     } catch (e) {
-      console.log(e)
+      console.error(e)
     }
   }
   cardPresent(reader) {
@@ -106,7 +106,7 @@ class SmartCard extends Component {
       this.props.setPersonInfo(person.firstnameTH, person.lastnameTH, person.firstnameEN, person.lastnameEN, person.citizenId)
     } catch (e) {
       this.props.setPersonInfo('เสียบบัตรไม่แน่นกรุณาเสียบใหม่!!', '', 'เสียบบัตรไม่แน่นกรุณาเสียบใหม่!!', '', '')
-      console.log(e)
+      console.warn(e)
     } finally {
       reader.disconnect()
     }
