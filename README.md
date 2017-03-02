@@ -25,12 +25,12 @@ yarn
 ```
 
 ## Run
-- Web Link ```localhost:3000```
+- Web Link ```http://localhost:3000``` (first time only click ```Allow``` Smart Card Browser and ```Allow and Remember```)
 ```
 npm start
 ```
 
-- Server Link ```localhost:3030```
+- Server Link ```http://localhost:3030```
 ```
 cd server
 npm start
@@ -41,6 +41,10 @@ node server/index.js
 ```
 
 ## Config firefox
+### Setting Home Page
+1. Press ```command + ,``` or Open ```preferences``` or Address ```about:preferences```
+2. Home Page: ```http://localhost:3000```
+
 ### Setting auto sharing webcam
 1. go to firefox typing address ```about:config```
 2. Search : ```media.navigator.permission.disabled```
@@ -53,20 +57,22 @@ node server/index.js
 
 ### How to uninstall full screen (R-kiosk)
 #### Mac
-1. Open terminal ```/Applications/Firefox.app/Contents/MacOS/firefox-bin -safe-mode```
-2. Select ```Start in Safe Mode```
-3. Press ```command + shift + A``` or Open ```Add-ons Manager```
-4. find R-kiosk and click ```Disable``` or ```Remove```
-5. Restart firefox
+1. Close All firefox browser
+2. Open terminal ```/Applications/Firefox.app/Contents/MacOS/firefox-bin -safe-mode```
+3. Select ```Start in Safe Mode```
+4. Press ```command + shift + A``` or Open ```Add-ons Manager```
+5. find R-kiosk and click ```Disable``` or ```Remove```
+6. Restart firefox
 
 #### Windows
-1. Press ```Windows + R```
-2. Typing  ```C:\Program Files\Mozilla Firefox\firefox.exe" -safe-mode``` (x64) or  ```C:\Program Files (x86)\Mozilla Firefox\firefox.exe" -safe-mode``` (x86)
-3. Enter
-4. Select ```Start in Safe Mode```
-5. Press Open ```Add-ons Manager```
-6. find R-kiosk and click ```Disable``` or ```Remove```
-7. Restart firefox
+1. Close All firefox browser
+2. Press ```Windows + R```
+3. Typing  ```C:\Program Files\Mozilla Firefox\firefox.exe" -safe-mode``` (x64) or  ```C:\Program Files (x86)\Mozilla Firefox\firefox.exe" -safe-mode``` (x86)
+4. Enter
+5. Select ```Start in Safe Mode```
+6. Press Open ```Add-ons Manager```
+7. find R-kiosk and click ```Disable``` or ```Remove```
+8. Restart firefox
 
 | MacOS Command | Shortcut |
 |---|---|---|---|---|
