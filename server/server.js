@@ -27,7 +27,7 @@ app.route('/upload')
       // console.log("Uploading: " + filename)
       // Path where image will be uploaded
       const id = new Date().getTime() + Math.random()
-      const imageFilename = `${id}.${params.name}.jpeg`
+      const imageFilename = `${id}.${params.firstnameTH}.jpeg`
       fstream = fs.createWriteStream(imagePath + imageFilename)
       params.image = imageFilename
       file.pipe(fstream)

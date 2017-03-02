@@ -9,68 +9,19 @@ import dimensions from './components/Dimensions'
 import RecentCardList from './components/RecentCardList'
 import Menu from './components/Menu/'
 import SmartCard from './components/SmartCard'
-
+import cardTemplateList from './config/cardTemplate'
 import mascot from './img/mascot.svg'
 import brand from './img/textOnly.svg'
-import cardUdon from './img/card_template/udon.png'
-import cardUbon from './img/card_template/ubon.jpg'
-import cardSaat from './img/card_template/SAAT.png'
 import imgCamera from './img/camera.png'
 import './data/face.js'
 import './App.css'
 import { defaultStyle, styleForMacbook, style, webfont, macbookWidth } from './config/style'
-
-const templateList = [
-  {
-    name: 'ส.บ.ม.ท.',
-    src: cardSaat,
-    captureSize: { width: 115, height: (115 / 3) * 4 },
-    capturePosition: { x: 12, y: 67 },
-    personInfoPosition: {
-      nameTH: { x: 430, y: 242 },
-      nameEN: { x: 430, y: 305 },
-      citizenId: { x: 585, y: 368 },
-      memberId: { x: 475, y: 430 },
-      memberType: { x: 810, y: 430 },
-      issueDate: { x: 20, y: 20 },
-    },
-  },
-  {
-    name: 'โรงเรียนอุบล',
-    src: cardUbon,
-    captureSize: { width: 98, height: (98 / 3) * 4 },
-    capturePosition: { x: 15, y: 83 },
-    personInfoPosition: {
-      nameTH: { x: 430, y: 242 },
-      nameEN: { x: 430, y: 305 },
-      citizenId: { x: 585, y: 368 },
-      memberId: { x: 475, y: 430 },
-      memberType: { x: 810, y: 430 },
-      issueDate: { x: 20, y: 20 },
-    },
-  },
-  {
-    name: 'โรงเรียนอุดร',
-    src: cardUdon,
-    captureSize: { width: 90, height: 120 },
-    capturePosition: { x: 17, y: 86 },
-    personInfoPosition: {
-      nameTH: { x: 430, y: 242 },
-      nameEN: { x: 430, y: 305 },
-      citizenId: { x: 585, y: 368 },
-      memberId: { x: 475, y: 430 },
-      memberType: { x: 810, y: 430 },
-      issueDate: { x: 20, y: 20 },
-    },
-  },
-]
 
 class App extends Component {
   constructor() {
     super()
     this.state = {
       index: 0,
-      cardTemplateList: templateList,
       currentCardTemplate: null,
       cardGenerateList: [],
       currentFaceDetection: {},
@@ -164,7 +115,7 @@ class App extends Component {
   setCardTemplate(index) {
     const rawWidth = 400
     const rawHeight = 251
-    const currentCardTemplate = clone(this.state.cardTemplateList[index])
+    const currentCardTemplate = clone(cardTemplateList[index])
     const cardWidthRatio = this.state.cardSize.width / rawWidth
     const cardHeightRatio = this.state.cardSize.height / rawHeight
     currentCardTemplate.captureSize.width *= cardWidthRatio
@@ -257,7 +208,7 @@ class App extends Component {
   handleNextCard() {
     let index = this.state.index
     index += 1
-    if (index >= this.state.cardTemplateList.length) {
+    if (index >= cardTemplateList.length) {
       index = 0
     }
     this.setCardTemplate(index)
@@ -266,7 +217,7 @@ class App extends Component {
     let index = this.state.index
     index -= 1
     if (index < 0) {
-      index = this.state.cardTemplateList.length - 1
+      index = cardTemplateList.length - 1
     }
     this.setCardTemplate(index)
   }
@@ -277,8 +228,7 @@ class App extends Component {
     }
     const cardGenerate = {
       date: new Date(),
-      name: 'ทดสอบชื่อ',
-      lastname: 'ทดสอบนามสกุล',
+      ...this.state.personInfo,
       canvas: this.elementCardTemplate,
       imgPath: this.elementCardTemplate.toDataURL('image/jpeg'),
       blob: this.dataURItoBlob(this.elementCardTemplate.toDataURL('image/jpeg')),
@@ -290,6 +240,7 @@ class App extends Component {
   sendData(objectData) {
     const data = new FormData()
     const tempObjectData = clone(objectData)
+    delete tempObjectData.canvas // fixbug
     delete tempObjectData.imgPath // fixbug
     Object.keys(tempObjectData).forEach((key) => {
       if (tempObjectData && Object.prototype.hasOwnProperty.call(tempObjectData, key)) {
@@ -360,7 +311,7 @@ class App extends Component {
                 </Column>
                 <Column size="is12" style={style}>
                   <SmartCard setPersonInfo={this.setPersonInfo} clearPersonInfo={this.clearPersonInfo} />
-                  <Button icon="fa fa-camera" buttonStyle="isOutlined" color="isDanger" onClick={this.capture}>ถ่ายรูป</Button>
+                  <Button icon="fa fa-camera" buttonStyle="isOutlined" color="isDanger" onClick={this.capture}>ลงทะเบียน</Button>
                 </Column>
               </Columns>
               <Columns>
