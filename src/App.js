@@ -5,7 +5,7 @@ import clone from 'lodash.clonedeep'
 import 'whatwg-fetch'
 import 'tracking'
 
-
+import Webcam from './components/Webcam'
 import dimensions from './components/Dimensions'
 import RecentCardList from './components/RecentCardList'
 import Menu from './components/Menu/'
@@ -68,21 +68,18 @@ class App extends Component {
     const self = this
     const video = this.elementVideo
     const tracker = new window.tracking.ObjectTracker(['face'])
+    tracker.setEdgesDensity(0.1)
     tracker.setInitialScale(4)
     tracker.setStepSize(2)
-    // tracker.setEdgesDensity(0.01)
-    tracker.setEdgesDensity(0.1)
     const trackingTask = window.tracking.track(video, tracker, { camera: true })
     tracker.on('track', (event) => {
-      const contextShow = self.elementShowVideo.getContext('2d')
-      contextShow.drawImage(video, 0, 0, this.state.videoSize.width, this.state.videoSize.height, 0, 0, self.elementShowVideo.width, self.elementShowVideo.height)
       if (event.data.length !== 0) {
         const max = event.data.reduce((a, b) => (a.width > b.width ? a : b))
         self.setState({ currentFaceDetection: max })
         const context = self.elementTempVideo.getContext('2d')
         context.clearRect(0, 0, self.state.imageSize.width, self.state.imageSize.height)
         context.drawImage(video, 0, 0, self.state.videoSize.width, self.state.videoSize.height, 0, 0, self.state.imageSize.width, self.state.imageSize.height)
-        this.drawCardTemplate()
+        self.drawCardTemplate()
       }
     })
     this.setTrackingTask(trackingTask)
@@ -295,7 +292,7 @@ class App extends Component {
               <Columns isMultiline>
                 <Column size="is6" style={style}>
                   <Image src={imgCamera} alt="Camera" className="App-camera" style={{ marginBottom: '5px', zIndex: 10 }} />
-                  <canvas ref={(element) => { this.elementShowVideo = element }} className="webcam" style={webcamStyle} width={defaultStyle.cameraSize.width} height={defaultStyle.cameraSize.height} />
+                  <Webcam audio={false} width={defaultStyle.cameraSize.width} height={defaultStyle.cameraSize.height} style={webcamStyle} />
                   <video ref={(element) => { this.elementVideo = element }} width={this.state.imageSize.width} height={this.state.imageSize.height} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} preload autoPlay loop muted />
                   <canvas ref={(element) => { this.elementTempVideo = element }} width={this.state.imageSize.width} height={this.state.imageSize.height} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} />
                   <img src={this.state.currentCardTemplate ? this.state.currentCardTemplate.src : ''} onLoad={this.onImgLoad} ref={(element) => { this.elementRawTemplate = element }} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} alt="" />
