@@ -30,7 +30,7 @@ class SmartCard extends Component {
         rdr.id = webcard.readers[i].name.replace(/\s/g, '').toLowerCase()
       }
     } catch (e) {
-      console.error(e)
+      // console.error(e)
     }
   }
   cardPresent(reader) {

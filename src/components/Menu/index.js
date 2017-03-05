@@ -3,13 +3,13 @@ import mascot from '../../img/mascot.svg'
 import brand from '../../img/textOnly.svg'
 import './styles.css'
 
-const BurgerMenu = require('react-burger-menu').elastic
+const BurgerMenu = require('react-burger-menu').push
 
 const Menu = () => (
   <BurgerMenu id="elastic" pageWrapId={'page-wrap'} outerContainerId={'root'} right>
     <h2 key="0">
       <span>
-        <img src={mascot} alt="Logo" /><br />
+        <img src={mascot} alt="Logo" className="menu-logo" /><br />
         <img src={brand} alt="NextSchool" className="App-brand" />
       </span>
     </h2>
