@@ -50,6 +50,11 @@ node server/index.js
 2. Search : ```media.navigator.permission.disabled```
 3. change to ```true```
 
+### Setting auto allow Smart Card Browser Plugin
+1. Installation WebCard Plugin
+2. go to firefox typing address ```about:addons```
+3. Plugins > Smart Card Browser Plugin > Change to ```Always Active```
+
 ### How to install full screen (R-kiosk)
 1. open https://addons.mozilla.org/en-US/firefox/addon/r-kiosk/
 2. install
