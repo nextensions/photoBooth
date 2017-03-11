@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
-import { Container, Content, Hero, HeroBody, HeroFoot, Title, Subtitle, Icon, Image, Columns, Column, Box, LevelLeft, Section, Button, Heading, Notification } from 're-bulma'
+import { Container, Content, Hero, HeroBody, HeroFoot, Icon, Columns, Column, Section, Heading } from 're-bulma'
 
 import RealtimePage from './components/Realtime'
-
 import mascot from '../../img/mascot.svg'
 import brand from '../../img/textOnly.svg'
-
-import { defaultStyle, style, webfont, macbookWidth, avatar } from '../../config/style'
-
-
+import { defaultStyle } from '../../config/style'
 
 class ClockIn extends Component {
 

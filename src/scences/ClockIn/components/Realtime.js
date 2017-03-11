@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { SocketProvider } from 'socket.io-react'
 import io from 'socket.io-client'
+import { TransitionMotion, spring, presets } from 'react-motion'
 import moment from 'moment'
 require('moment/locale/th')
-import { Container, Content, Hero, HeroBody, HeroFoot, Title, Subtitle, Icon, Image, Columns, Column, Box, LevelLeft, Section, Button, Heading, Notification } from 're-bulma'
-import { defaultStyle, style, webfont, macbookWidth, avatar } from '../../../config/style'
+import { Title, Columns, Column, Notification } from 're-bulma'
+import { webfont, avatar } from '../../../config/style'
 
 const uri = process.env.REACT_APP_SOCKET_URI
 const socket = io.connect(uri, { secure: true })
@@ -17,7 +18,7 @@ const ClockDetail = ({ clock }) => {
     <Notification style={{ margin: 15 }}>
       <Columns>
         <Column size="is4">
-          <img src={`https://randomuser.me/api/portraits/women/${Math.floor(Math.random() * 80) + 1}.jpg`} style={avatar} />
+          <img src={`https://randomuser.me/api/portraits/women/${Math.floor(Math.random() * 80) + 1}.jpg`} style={avatar} alt={`${clock.firstname} ${clock.lastname}`} />
         </Column>
         <Column size="is6" style={{ textAlign: 'left', paddingTop: 20 }}>
           <Title size="is1" style={{ ...webfont, fontSize: '62px' }}>{clock.firstname} {clock.lastname}</Title>
@@ -33,11 +34,62 @@ const ClockDetail = ({ clock }) => {
   )
 }
 
-const ClockList = ({ list }) => (
-  <div>
-    {list.map((clock, index) => { return index < 9 ? <ClockDetail key={index} clock={clock} /> : '' })}
-  </div>
-)
+class ClockList extends Component {
+
+  getDefaultStyles(list) {
+    return list.map((clock, index) => ({ ...clock, key: `k${index}`, style: { height: 0, opacity: 0 } }))
+  }
+
+  getStyles() {
+    return {
+      opacity: spring(1, presets.gentle),
+    }
+  }
+
+  willEnter() {
+    return {
+      height: 0,
+      opacity: 0,
+    }
+  }
+
+  willLeave() {
+    return {
+      height: spring(0),
+      opacity: spring(0),
+    }
+  }
+
+  getListStyle(list) {
+    return list.map((clock, index) => ({ key: `k${index}`, style: this.getStyles(), data: clock }))
+  }
+
+  render() {
+    const { list } = this.props
+
+    if (list.length)
+      return (
+        <TransitionMotion
+          defaultStyles={this.getDefaultStyles(list)}
+          styles={this.getListStyle(list)}
+          willLeave={this.willLeave}
+          willEnter={this.willEnter}
+        >
+        {int =>
+          <div>
+            {int.map(({ key, style, data }) =>
+              <div key={`k${key}`} style={style}>
+                <ClockDetail key={key} clock={data} />
+              </div>
+            )}
+          </div>
+        }
+        </TransitionMotion>
+      )
+
+    return <div />
+  }
+}
 
 class Realtime extends Component {
   constructor(props, context) {
