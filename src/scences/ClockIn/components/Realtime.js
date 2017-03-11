@@ -34,7 +34,7 @@ const ClockDetail = ({ clock }) => {
   )
 }
 
-class ClockList extends Component {
+class ClockListWithMotion extends Component {
 
   getDefaultStyles(list) {
     return list.map((clock, index) => ({ ...clock, key: `k${index}`, style: { height: 0, opacity: 0 } }))
@@ -91,6 +91,12 @@ class ClockList extends Component {
   }
 }
 
+const ClockList = ({ list }) => (
+  <div>
+    {list.map((clock, index) => <ClockDetail key={index} clock={clock} />)}
+  </div>
+)
+
 class Realtime extends Component {
   constructor(props, context) {
     super(props, context)
@@ -104,17 +110,25 @@ class Realtime extends Component {
 
   handleMessage(msg) {
     const clockInfo = { ...msg, time: Date.now() }
+    const limitClockInfo = this.state.clock
+
+    if (limitClockInfo.length >= 9) {
+      limitClockInfo.splice(8)
+    }
+
     this.setState({
-      clock: [clockInfo, ...this.state.clock],
+      clock: [clockInfo, ...limitClockInfo],
     })
-    console.log(this.state)
+
+    // console.log(this.state)
   }
 
   render() {
+    console.log(this.state.clock)
     return (
       <div>
         <h1>Realtime Clockin</h1>
-        <ClockList list={this.state.clock} />
+        <ClockListWithMotion list={this.state.clock} />
       </div>
     )
   }
