@@ -40,6 +40,16 @@ or
 node server/index.js
 ```
 
+## Build
+```
+npm run build
+```
+
+## Run Production (API and Web server)
+```
+node server.js
+```
+
 ## Config firefox
 ### Setting Home Page
 1. Press ```command + ,``` or Open ```preferences``` or Address ```about:preferences```
