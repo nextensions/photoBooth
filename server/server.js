@@ -17,9 +17,10 @@ Create a Route (/upload) to handle the Form submission
 (handle POST requests to /upload)
 Express v4  Route definition
 ============================================================ */
+
 app.route('/upload')
     .post((req, res) => {
-        let fstream
+        let fstream        
         const params = {}
         req.pipe(req.busboy)
         req.busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
@@ -27,10 +28,17 @@ app.route('/upload')
             // console.log("Uploading: " + filename)
             // Path where image will be uploaded
             const id = new Date().getTime() + Math.random()
-            const imageFilename = `${id}.${params.firstnameTH}.jpeg`
+            const imageFilename = `${id}.${fieldname}.${params.firstnameTH}.jpeg`
             fstream = fs.createWriteStream(imagePath + imageFilename)
-            params.image = imageFilename
+            params[fieldname] = imageFilename
             file.pipe(fstream)
+            console.log(`Upload Finished of  + ${filename}`)
+        })
+        req.busboy.on('field', (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) => {
+            // console.log('Field [' + fieldname + ']: value: ' + (val))
+            params[fieldname] = val
+        })
+        req.busboy.on('finish', () => {
             fstream.on('close', () => {
                 const fields = []
                 for (const k in params) {
@@ -64,15 +72,8 @@ app.route('/upload')
                         })
                     }
                 })
-                console.log(`Upload Finished of  + ${filename}`)
                 res.redirect('back') // where to go next
             })
-        })
-        req.busboy.on('field', (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) => {
-            // console.log('Field [' + fieldname + ']: value: ' + (val))
-            params[fieldname] = val
-        })
-        req.busboy.on('finish', () => {
             console.log('Done parsing form!')
         })
     })

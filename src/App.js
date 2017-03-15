@@ -11,12 +11,14 @@ import RecentCardList from './components/RecentCardList'
 import Menu from './components/Menu/'
 import SmartCard from './components/SmartCard'
 import Clock from './components/Clock'
+import Register from './components/Register'
 import cardTemplateList from './config/cardTemplate'
 import mascot from './img/mascot.svg'
 import brand from './img/textOnly.svg'
 import imgCamera from './img/camera.png'
+import regisData from './data/RegisData.json'
 
-import './data/face-min.js'
+import './data/face-min'
 import './App.css'
 import { defaultStyle, styleForMacbook, style, webfont, macbookWidth } from './config/style'
 
@@ -52,6 +54,11 @@ class App extends Component {
         citizenId: '',
         memberId: '',
         memberType: '',
+        school: '',
+        address: '',
+        mobile: '',
+        interest: '',
+        note: '',
       },
       trackingTask: null,
     }
@@ -131,6 +138,7 @@ class App extends Component {
     })
   }
   setPersonInfo(firstnameTH, lastnameTH, firstnameEN, lastnameEN, citizenId) {
+    const result = this.searchRegisterData(firstnameTH, lastnameTH) || {}
     this.setState({
       personInfo: {
         firstnameTH,
@@ -138,12 +146,21 @@ class App extends Component {
         firstnameEN,
         lastnameEN,
         citizenId,
-        memberId: '99999',
-        memberType: 'Normal',
+        memberId: result.code || '',
+        memberType: result.type || '',
+        school: result.school || '',
+        address: result.address || '',
+        mobile: result.mobile || '',
+        interest: '',
+        note: '',
       },
     }, () => {
       this.drawCardTemplate()
     })
+  }
+  searchRegisterData(firstname, lastname) {
+    const result = regisData.find(user => ((user.firstname.indexOf(firstname) !== -1) && (user.lastname.indexOf(lastname) !== -1)))
+    return result
   }
   drawCardTemplate() {
     const context = this.elementCardTemplate.getContext('2d')
@@ -189,6 +206,11 @@ class App extends Component {
         citizenId: '',
         memberId: '',
         memberType: '',
+        school: '',
+        address: '',
+        mobile: '',
+        interest: '',
+        note: '',
       },
     }, () => {
       this.drawCardTemplate()
@@ -235,6 +257,7 @@ class App extends Component {
       canvas: this.elementCardTemplate,
       imgPath: this.elementCardTemplate.toDataURL('image/jpeg'),
       blob: this.dataURItoBlob(this.elementCardTemplate.toDataURL('image/jpeg')),
+      blobUser: this.dataURItoBlob(this.elementTempVideo.toDataURL('image/jpeg')),
     }
     cardGenerateList.unshift(cardGenerate)
     this.sendData(cardGenerate)
@@ -314,6 +337,7 @@ class App extends Component {
                 </Column>
                 <Column size="is12" style={style}>
                   <SmartCard setPersonInfo={this.setPersonInfo} clearPersonInfo={this.clearPersonInfo} />
+                  <Register />
                   <Button icon="fa fa-camera" buttonStyle="isOutlined" color="isDanger" onClick={this.capture}>ลงทะเบียน</Button>
                 </Column>
               </Columns>
