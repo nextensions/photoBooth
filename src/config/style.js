@@ -16,3 +16,11 @@ export const styleForMacbook = {
   cameraSize: { width: 240, height: 180 },
   cameraPosition: { top: '145px', left: '180px' },
 }
+
+export const avatar = {
+  width: 194,
+  height: 194,
+  borderRadius: '128px',
+  borderWidth: '1px',
+  borderColor: '#d6d7da',
+}
