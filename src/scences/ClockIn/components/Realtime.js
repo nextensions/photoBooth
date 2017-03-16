@@ -135,7 +135,6 @@ class Realtime extends Component {
 
   render() {
     const items = []
-    console.log(this.state.clock.length)
     for (let index = 0; index < this.state.clock.length; index += 1) {
       items.unshift(<ClockDetail key={index} highlight={index === (this.state.clock.length - 1)} clock={this.state.clock[index]} />)
     }
