@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react'
-import { Container, Content, Hero, HeroBody, HeroFoot, Title, Subtitle, Icon, Image, Columns, Column, Box, LevelLeft, Section, Button, Heading } from 're-bulma'
+import { Container, Content, Hero, HeroBody, HeroFoot, Title, Subtitle, Icon, Image, Columns, Column, Box, LevelLeft, Section, Heading } from 're-bulma'
 import reactKeydown from 'react-keydown'
 import clone from 'lodash.clonedeep'
 import 'whatwg-fetch'
 import 'tracking'
+import 'bulma/css/bulma.css'
 
 import Webcam from './components/Webcam'
 import dimensions from './components/Dimensions'
@@ -55,12 +56,14 @@ class App extends Component {
         memberId: '',
         memberType: '',
         school: '',
+        position: '',
         address: '',
         mobile: '',
         interest: '',
         note: '',
       },
       trackingTask: null,
+      registerIsOpen: false,
     }
     this.capture = this.capture.bind(this)
     this.onImgLoad = this.onImgLoad.bind(this)
@@ -69,33 +72,21 @@ class App extends Component {
     this.drawPersonInfo = this.drawPersonInfo.bind(this)
     this.drawCardTemplate = this.drawCardTemplate.bind(this)
     this.setTrackingTask = this.setTrackingTask.bind(this)
+    this.handleRegisterClose = this.handleRegisterClose.bind(this)
+    this.handleRegisterOpen = this.handleRegisterOpen.bind(this)
+    this.handleTrackerStart = this.handleTrackerStart.bind(this)
+    this.handleTrackerStop = this.handleTrackerStop.bind(this)
   }
   componentDidMount() {
     this.setCardTemplate(0)
-    const self = this
-    const video = this.elementVideo
-    const tracker = new window.tracking.ObjectTracker(['face'])
-    tracker.setEdgesDensity(0.1)
-    tracker.setInitialScale(4)
-    tracker.setStepSize(2)
-    const trackingTask = window.tracking.track(video, tracker, { camera: true })
-    tracker.on('track', (event) => {
-      if (event.data.length !== 0) {
-        const max = event.data.reduce((a, b) => (a.width > b.width ? a : b))
-        self.setState({ currentFaceDetection: max })
-        const context = self.elementTempVideo.getContext('2d')
-        context.clearRect(0, 0, self.state.imageSize.width, self.state.imageSize.height)
-        context.drawImage(video, 0, 0, self.state.videoSize.width, self.state.videoSize.height, 0, 0, self.state.imageSize.width, self.state.imageSize.height)
-        self.drawCardTemplate()
-      }
-    })
-    this.setTrackingTask(trackingTask)
-    // this.state.trackingTask.stop() // If you wan't to stop tracking
+    this.handleTrackerStart()
   }
   componentWillReceiveProps({ keydown }) {
     if (keydown.event && keydown.event.which === 13) {
       // Enter key
-      this.capture()
+      if (this.state.registerIsOpen === false) {
+        this.capture()
+      }
     } else if (keydown.event && keydown.event.which === 39) {
       // Left key
       this.handleNextCard()
@@ -149,6 +140,7 @@ class App extends Component {
         memberId: result.code || '',
         memberType: result.type || '',
         school: result.school || '',
+        position: result.position || '',
         address: result.address || '',
         mobile: result.mobile || '',
         interest: '',
@@ -157,6 +149,29 @@ class App extends Component {
     }, () => {
       this.drawCardTemplate()
     })
+  }
+  handleTrackerStart() {
+    const self = this
+    const video = this.elementVideo
+    const tracker = new window.tracking.ObjectTracker(['face'])
+    tracker.setEdgesDensity(0.1)
+    tracker.setInitialScale(4)
+    tracker.setStepSize(2)
+    const trackingTask = window.tracking.track(video, tracker, { camera: true })
+    tracker.on('track', (event) => {
+      if (event.data.length !== 0) {
+        const max = event.data.reduce((a, b) => (a.width > b.width ? a : b))
+        self.setState({ currentFaceDetection: max })
+        const context = self.elementTempVideo.getContext('2d')
+        context.clearRect(0, 0, self.state.imageSize.width, self.state.imageSize.height)
+        context.drawImage(video, 0, 0, self.state.videoSize.width, self.state.videoSize.height, 0, 0, self.state.imageSize.width, self.state.imageSize.height)
+        self.drawCardTemplate()
+      }
+    })
+    this.setTrackingTask(trackingTask)
+  }
+  handleTrackerStop() {
+    this.state.trackingTask.stop() // If you wan't to stop tracking
   }
   searchRegisterData(firstname, lastname) {
     const result = regisData.find(user => ((user.firstname.indexOf(firstname) !== -1) && (user.lastname.indexOf(lastname) !== -1)))
@@ -207,6 +222,7 @@ class App extends Component {
         memberId: '',
         memberType: '',
         school: '',
+        position: '',
         address: '',
         mobile: '',
         interest: '',
@@ -247,6 +263,7 @@ class App extends Component {
     this.setCardTemplate(index)
   }
   capture() {
+    this.handleTrackerStop()
     const cardGenerateList = this.state.cardGenerateList
     if (cardGenerateList.length >= 6) {
       cardGenerateList.splice(5, 1) // delete card over length
@@ -260,8 +277,8 @@ class App extends Component {
       blobUser: this.dataURItoBlob(this.elementTempVideo.toDataURL('image/jpeg')),
     }
     cardGenerateList.unshift(cardGenerate)
-    this.sendData(cardGenerate)
-    this.setState({ cardGenerateList })
+    // this.sendData(cardGenerate)
+    this.setState({ cardGenerateList, registerIsOpen: true })
   }
   sendData(objectData) {
     const data = new FormData()
@@ -278,6 +295,14 @@ class App extends Component {
       header: { 'Access-Control-Allow-Origin': '*' },
       body: data,
     })
+  }
+  handleRegisterClose() {
+    this.handleTrackerStart()
+    this.setState({ registerIsOpen: false })
+  }
+  handleRegisterOpen() {
+    this.capture()
+    // this.setState({ registerIsOpen: true })
   }
   render() {
     if (this.props.containerWidth === macbookWidth) {
@@ -337,8 +362,7 @@ class App extends Component {
                 </Column>
                 <Column size="is12" style={style}>
                   <SmartCard setPersonInfo={this.setPersonInfo} clearPersonInfo={this.clearPersonInfo} />
-                  <Register />
-                  <Button icon="fa fa-camera" buttonStyle="isOutlined" color="isDanger" onClick={this.capture}>ลงทะเบียน</Button>
+                  <Register isOpen={this.state.registerIsOpen} open={this.handleRegisterOpen} close={this.handleRegisterClose} sendData={this.sendData} data={this.state.cardGenerateList} />
                 </Column>
               </Columns>
               <Columns>

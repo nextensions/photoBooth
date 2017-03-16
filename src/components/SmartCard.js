@@ -114,7 +114,7 @@ class SmartCard extends Component {
   render() {
     return (
       <div>
-        <object id="webcard" type="application/x-webcard" width="0" height="0">
+        <object id="webcard" type="application/x-webcard" width="0" height="0" style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }}>
           <param name="onload" value="pluginLoaded" />
         </object>
       </div>
