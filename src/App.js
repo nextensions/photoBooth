@@ -1,17 +1,23 @@
 import React, { Component, PropTypes } from 'react'
-import { Container, Content, Hero, HeroBody, HeroFoot, Title, Subtitle, Icon, Image, Columns, Column, Box, LevelLeft, Section, Heading } from 're-bulma'
+import { Container, Hero, HeroBody, Title, Subtitle, Image, Columns, Column, Box, LevelLeft, Section, Heading } from 're-bulma'
 import reactKeydown from 'react-keydown'
 import clone from 'lodash.clonedeep'
 import 'whatwg-fetch'
 import 'tracking'
 import 'bulma/css/bulma.css'
-import { Webcam, dimensions, RecentCardList, Menu, SmartCard, Clock, Register, Assets, Footer } from './components/'
+import { Webcam, dimensions, RecentCardList, Menu, SmartCard, Clock, Register, Footer } from './components/'
 import cardTemplateList from './config/cardTemplate'
 import regisData from './data/RegisData.json'
 
 import './data/face-min'
 import './App.css'
 import { defaultStyle, styleForMacbook, style, webfont, macbookWidth } from './config/style'
+
+
+import brand from './img/textOnly.svg'
+import mascot from './img/mascot.svg'
+import imgCamera from './img/camera.png'
+
 
 class App extends Component {
   constructor() {
@@ -321,8 +327,8 @@ class App extends Component {
           <Section className="App-heroSection" style={{ padding: '20px' }}>
             <Container isFluid>
               <Heading>
-                <img src={Assets.mascot} alt="Mascot" className="App-logo" style={{ height: defaultStyle.mascotHeight }} /> <br />
-                <img src={Assets.brand} alt="NextSchool" className="App-brand" style={{ width: defaultStyle.brandWidth }} />
+                <img src={mascot} alt="Mascot" className="App-logo" style={{ height: defaultStyle.mascotHeight }} /> <br />
+                <img src={brand} alt="NextSchool" className="App-brand" style={{ width: defaultStyle.brandWidth }} />
               </Heading>
             </Container>
           </Section>
@@ -335,7 +341,7 @@ class App extends Component {
               </Columns>
               <Columns isMultiline>
                 <Column size="is6" style={style}>
-                  <Image src={Assets.imgCamera} alt="Camera" className="App-camera" style={{ marginBottom: '5px', zIndex: 10 }} />
+                  <Image src={imgCamera} alt="Camera" className="App-camera" style={{ marginBottom: '5px', zIndex: 10 }} />
                   <Webcam audio={false} width={defaultStyle.cameraSize.width} height={defaultStyle.cameraSize.height} style={webcamStyle} />
                   <video ref={(element) => { this.elementVideo = element }} width={this.state.imageSize.width} height={this.state.imageSize.height} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} preload autoPlay loop muted />
                   <canvas ref={(element) => { this.elementTempVideo = element }} width={this.state.imageSize.width} height={this.state.imageSize.height} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} />
