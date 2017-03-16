@@ -64,6 +64,7 @@ class App extends Component {
       },
       trackingTask: null,
       registerIsOpen: false,
+      registerMode: true,
     }
     this.capture = this.capture.bind(this)
     this.onImgLoad = this.onImgLoad.bind(this)
@@ -277,8 +278,12 @@ class App extends Component {
       blobUser: this.dataURItoBlob(this.elementTempVideo.toDataURL('image/jpeg')),
     }
     cardGenerateList.unshift(cardGenerate)
-    // this.sendData(cardGenerate)
-    this.setState({ cardGenerateList, registerIsOpen: true })
+    if (this.state.registerMode === false) {
+      this.sendData(cardGenerate)
+      this.setState({ cardGenerateList })
+    } else {
+      this.setState({ cardGenerateList, registerIsOpen: true })
+    }    
   }
   sendData(objectData) {
     const data = new FormData()
@@ -302,7 +307,6 @@ class App extends Component {
   }
   handleRegisterOpen() {
     this.capture()
-    // this.setState({ registerIsOpen: true })
   }
   render() {
     if (this.props.containerWidth === macbookWidth) {
@@ -362,7 +366,13 @@ class App extends Component {
                 </Column>
                 <Column size="is12" style={style}>
                   <SmartCard setPersonInfo={this.setPersonInfo} clearPersonInfo={this.clearPersonInfo} />
-                  <Register isOpen={this.state.registerIsOpen} open={this.handleRegisterOpen} close={this.handleRegisterClose} sendData={this.sendData} data={this.state.cardGenerateList} />
+                  <div className="checkbox">
+                      <label style={{fontSize: "1.5em"}}>
+                          <input type="checkbox" onChange={() => { this.setState({ registerMode: !this.state.registerMode }) }} checked={this.state.registerMode} />
+                          <span className="cr"><i className="cr-icon fa fa-check"></i></span>
+                      </label>
+                      <Register isOpen={this.state.registerIsOpen} open={this.handleRegisterOpen} close={this.handleRegisterClose} sendData={this.sendData} data={this.state.cardGenerateList} />
+                  </div>
                 </Column>
               </Columns>
               <Columns>

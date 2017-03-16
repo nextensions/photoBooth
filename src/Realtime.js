@@ -9,7 +9,8 @@ import io from 'socket.io-client'
 
 import './Realtime.css'
 
-const uri = process.env.REACT_APP_SOCKET_URI
+const uri = 'https://app.nextschool.io:8443'
+const socket = io.connect(uri, { secure: true })
 const schoolId = 132
 
 const ClockDetail = ({ clockList }) => (
@@ -26,8 +27,7 @@ class ClockList extends Component {
       clock: [],
     }
     this.handleMessage = this.handleMessage.bind(this)
-    this.props.socket.emit('subscribe', { topic: 'clock-132' })
-    this.props.socket.on(`clock-${schoolId}`, msg => this.handleMessage(msg))
+    socket.on(`clock-${schoolId}`, msg => this.handleMessage(msg))
   }
 
   handleMessage(msg) {
@@ -48,16 +48,15 @@ class ClockList extends Component {
 }
 
 class RealtimePage extends Component {
-  constructor() {
-    super()
-    this.state = {
-      socket: io.connect(uri, { secure: true }),
-    }
+
+  componentDidMount() {
+    socket.emit('subscribe', { topic: 'clock-132' })
   }
+
   render() {
     return (
-      <SocketProvider>
-        <ClockList socket={this.state.socket} />
+      <SocketProvider socket={socket}>
+        <ClockList />
       </SocketProvider>
     )
   }

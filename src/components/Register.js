@@ -4,20 +4,24 @@ import { Container, Button } from 're-bulma'
 class Register extends Component {
   constructor(props) {
     super(props)
-    this.state = { data: {
-      firstnameTH: '',
-      lastnameTH: '',
-      firstnameEN: '',
-      lastnameEN: '',
-      citizenId: '',
-      memberId: '',
-      memberType: '',
-      school: '',
-      address: '',
-      mobile: '',
-      interest: '',
-      note: '',
-    } }
+    this.state = {
+      data: {
+        firstnameTH: '',
+        lastnameTH: '',
+        firstnameEN: '',
+        lastnameEN: '',
+        citizenId: '',
+        memberId: '',
+        memberType: '',
+        school: '',
+        position: '',
+        address: '',
+        mobile: '',
+        interest: '',
+        note: '',
+      },
+      beforeIsOpen: false,
+    }
     this.handleRegis = this.handleRegis.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -26,6 +30,13 @@ class Register extends Component {
   componentWillReceiveProps() {
     if (this.props.data && this.props.data[0]) {
       this.setState({ data: this.props.data[0] })
+    }
+    this.setState({ beforeIsOpen: this.props.isOpen })
+    if (this.props.isOpen === true && this.state.beforeIsOpen === false) {
+      const self = this
+      setTimeout(() => {
+        self.elementFirstnameTH.focus()
+      }, 0)
     }
   }
   handleRegis() {
