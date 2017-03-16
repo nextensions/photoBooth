@@ -20,7 +20,7 @@ class ClockIn extends Component {
               </Heading>
             </Container>
           </Section>
-          <HeroBody style={{ padding: '40px 20px 0', alignItems: 'flex-start' }}>
+          <HeroBody style={{ padding: '40px 20px 0', alignItems: 'flex-start', maxHeight: '2385px', overflow: 'hidden' }}>
             <Container isFluid>
               <Columns>
                 <Column>
@@ -29,7 +29,7 @@ class ClockIn extends Component {
               </Columns>
             </Container>
           </HeroBody>
-          <HeroFoot>
+          <HeroFoot className="stickyFooter">
             <Container>
               <Content>
                 <p style={{ textAlign: 'center', padding: '10px' }}>

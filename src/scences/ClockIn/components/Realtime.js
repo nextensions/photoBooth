@@ -23,7 +23,9 @@ const ClockDetail = ({ clock, highlight }) => {
     <Notification style={{ ...firstItemStyle, margin: 15 }} className={firstItemClassName}>
       <Columns>
         <Column size="is4">
-          <img src={`${imgHost}${clock.image}`} style={avatar} alt={`${clock.firstname} ${clock.lastname}`} />
+          <div className="image-cropper">
+            <img src={`${imgHost}${clock.image}`} className="rounded avatar" alt={`${clock.firstname} ${clock.lastname}`} />
+          </div>
         </Column>
         <Column size="is6" style={{ textAlign: 'left', paddingTop: 20 }}>
           <Title size="is1" style={{ ...webfont, fontSize: '62px' }}>{clock.firstname} {clock.lastname}</Title>
@@ -120,15 +122,20 @@ class Realtime extends Component {
 
   addClockItem(msg) {
     const clockInfo = { ...msg, time: Date.now() }
+    const clockList = this.state.clock
+
+    // if (this.state.clock.length >= 9) {
+    //   clockList.splice(8)
+    // }
 
     this.setState({
-      clock: [...this.state.clock, clockInfo],
+      clock: [...clockList, clockInfo],
     })
   }
 
   render() {
     const items = []
-
+    console.log(this.state.clock.length)
     for (let index = 0; index < this.state.clock.length; index += 1) {
       items.unshift(<ClockDetail key={index} highlight={index === (this.state.clock.length - 1)} clock={this.state.clock[index]} />)
     }
