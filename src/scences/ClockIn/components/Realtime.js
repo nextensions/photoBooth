@@ -4,7 +4,7 @@ import io from 'socket.io-client'
 import { TransitionMotion, spring, presets } from 'react-motion'
 import moment from 'moment'
 import { Title, Columns, Column, Notification } from 're-bulma'
-import { webfont, avatar } from '../../../config/style'
+import { webfont } from '../../../config/style'
 import './Realtime.css'
 
 require('moment/locale/th')
@@ -15,9 +15,9 @@ const socket = io.connect(uri, { secure: true })
 const schoolId = process.env.REACT_APP_SCHOOL_ID
 
 const ClockDetail = ({ clock, highlight }) => {
-  const clockTime = moment(clock.time).locale('th')
-  const firstItemStyle = highlight ? { borderColor: '#F15C27', border: '2px solid #F15C27' } : {}
-  const firstItemClassName = highlight ? 'firstItem ' : 'firstItem effect7'
+const clockTime = moment(clock.time).locale('th')
+const firstItemStyle = highlight ? { borderColor: '#F15C27', border: '2px solid #F15C27' } : {}
+const firstItemClassName = highlight ? 'firstItem ' : 'firstItem effect7'
 
   return (
     <Notification style={{ ...firstItemStyle, margin: 15 }} className={firstItemClassName}>
