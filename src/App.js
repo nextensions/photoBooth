@@ -5,18 +5,8 @@ import clone from 'lodash.clonedeep'
 import 'whatwg-fetch'
 import 'tracking'
 import 'bulma/css/bulma.css'
-
-import Webcam from './components/Webcam'
-import dimensions from './components/Dimensions'
-import RecentCardList from './components/RecentCardList'
-import Menu from './components/Menu/'
-import SmartCard from './components/SmartCard'
-import Clock from './components/Clock'
-import Register from './components/Register'
+import { Webcam, dimensions, RecentCardList, Menu, SmartCard, Clock, Register, Assets, Footer } from './components/'
 import cardTemplateList from './config/cardTemplate'
-import mascot from './img/mascot.svg'
-import brand from './img/textOnly.svg'
-import imgCamera from './img/camera.png'
 import regisData from './data/RegisData.json'
 
 import './data/face-min'
@@ -325,8 +315,8 @@ class App extends Component {
           <Section className="App-heroSection" style={{ padding: '20px' }}>
             <Container isFluid>
               <Heading>
-                <img src={mascot} alt="Mascot" className="App-logo" style={{ height: defaultStyle.mascotHeight }} /> <br />
-                <img src={brand} alt="NextSchool" className="App-brand" style={{ width: defaultStyle.brandWidth }} />
+                <img src={Assets.mascot} alt="Mascot" className="App-logo" style={{ height: defaultStyle.mascotHeight }} /> <br />
+                <img src={Assets.brand} alt="NextSchool" className="App-brand" style={{ width: defaultStyle.brandWidth }} />
               </Heading>
             </Container>
           </Section>
@@ -339,7 +329,7 @@ class App extends Component {
               </Columns>
               <Columns isMultiline>
                 <Column size="is6" style={style}>
-                  <Image src={imgCamera} alt="Camera" className="App-camera" style={{ marginBottom: '5px', zIndex: 10 }} />
+                  <Image src={Assets.imgCamera} alt="Camera" className="App-camera" style={{ marginBottom: '5px', zIndex: 10 }} />
                   <Webcam audio={false} width={defaultStyle.cameraSize.width} height={defaultStyle.cameraSize.height} style={webcamStyle} />
                   <video ref={(element) => { this.elementVideo = element }} width={this.state.imageSize.width} height={this.state.imageSize.height} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} preload autoPlay loop muted />
                   <canvas ref={(element) => { this.elementTempVideo = element }} width={this.state.imageSize.width} height={this.state.imageSize.height} style={{ visibility: 'hidden', position: 'fixed', left: 0, top: 0 }} />
@@ -377,15 +367,7 @@ class App extends Component {
               </Columns>
             </Container>
           </HeroBody>
-          <HeroFoot>
-            <Container>
-              <Content>
-                <p style={{ textAlign: 'center', padding: '10px' }}>
-                  made with <Icon icon="fa fa-heart" size="isSmall" style={{ color: 'red' }} /> by <a href="http://www.nextgensoft.co.th">Nextgensoft</a>
-                </p>
-              </Content>
-            </Container>
-          </HeroFoot>
+          {Footer}
         </Hero>
       </div>
     )
