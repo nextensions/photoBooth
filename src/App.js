@@ -57,6 +57,7 @@ class App extends Component {
         memberType: '',
         school: '',
         position: '',
+        student: '',
         address: '',
         mobile: '',
         interest: '',
@@ -144,6 +145,7 @@ class App extends Component {
         position: result.position || '',
         address: result.address || '',
         mobile: result.mobile || '',
+        student: '',
         interest: '',
         note: '',
       },
@@ -203,7 +205,6 @@ class App extends Component {
   }
   drawPersonInfo(context) {
     const tempContext = context
-    // console.log("test")
     tempContext.font = '48px THSarabunNewBold'
     tempContext.fillStyle = '#000000'
     tempContext.fillText(`${this.state.personInfo.firstnameTH} ${this.state.personInfo.lastnameTH}`, this.state.currentCardTemplate.personInfoPosition.nameTH.x, this.state.currentCardTemplate.personInfoPosition.nameTH.y)
@@ -224,6 +225,7 @@ class App extends Component {
         memberType: '',
         school: '',
         position: '',
+        student: '',
         address: '',
         mobile: '',
         interest: '',
@@ -283,7 +285,7 @@ class App extends Component {
       this.setState({ cardGenerateList })
     } else {
       this.setState({ cardGenerateList, registerIsOpen: true })
-    }    
+    }
   }
   sendData(objectData) {
     const data = new FormData()
