@@ -1,31 +1,54 @@
 import React, { Component, PropTypes } from 'react'
-import { Container, Button } from 're-bulma'
+import { Container } from 're-bulma'
 
 class Register extends Component {
   constructor(props) {
     super(props)
-    this.state = { data: {
-      firstnameTH: '',
-      lastnameTH: '',
-      firstnameEN: '',
-      lastnameEN: '',
-      citizenId: '',
-      memberId: '',
-      memberType: '',
-      school: '',
-      address: '',
-      mobile: '',
-      interest: '',
-      note: '',
-    } }
+    this.state = {
+      data: {
+        firstnameTH: '',
+        lastnameTH: '',
+        firstnameEN: '',
+        lastnameEN: '',
+        citizenId: '',
+        memberId: '',
+        memberType: '',
+        school: '',
+        position: '',
+        student: '',
+        address: '',
+        mobile: '',
+        interest: '',
+        note: '',
+      },
+      beforeIsOpen: false,
+    }
     this.handleRegis = this.handleRegis.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleRegisEnter = this.handleRegisEnter.bind(this)
   }
+  componentDidMount() {
+    this.flow = [
+      this.elementFirstnameTH,
+      this.elementLastnameTH,
+      this.elementPosition,
+      this.elementSchool,
+      this.elementAddress,
+      this.elementStudent,
+      this.elementMobile,
+    ]
+  }
   componentWillReceiveProps() {
     if (this.props.data && this.props.data[0]) {
       this.setState({ data: this.props.data[0] })
+    }
+    this.setState({ beforeIsOpen: this.props.isOpen })
+    if (this.props.isOpen === true && this.state.beforeIsOpen === false) {
+      const self = this
+      setTimeout(() => {
+        self.flow.find(value => (!value.value)).focus()
+      }, 0)
     }
   }
   handleRegis() {
@@ -42,18 +65,25 @@ class Register extends Component {
   }
   handleRegisEnter(event) {
     if (event.key === 'Enter') {
-      this.handleRegis()
+      // this.handleRegis()
     }
   }
   handleKeyPress(value, event) {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && event.target.value) {
       this[value].focus()
+    } else if (event.key === 'Escape') {
+      this.props.close()
     }
   }
   render() {
     return (
       <div>
-        <Button buttonStyle="isOutlined" color="isDanger" icon="fa fa-camera" onClick={() => this.props.open()}>ลงทะเบียน</Button>
+        <a className="button is-danger is-outlined" onClick={() => this.props.open()}>
+          <span className="icon is-small">
+            <i className="fa fa-camera"></i>
+          </span>
+          <span>ลงทะเบียน</span>
+        </a>
         <div className={this.props.isOpen ? 'modal is-active' : 'modal'}>
           <div className="modal-background"></div>
           <div className="modal-card">
@@ -67,31 +97,31 @@ class Register extends Component {
                   <div className="column">
                     <label className="label">ชื่อ</label>
                     <p className="control">
-                      <input ref={(e) => { this.elementFirstnameTH = e }} onKeyPress={event => this.handleKeyPress('elementLastnameTH', event)} className="input" type="text" name="firstnameTH" value={this.state.data.firstnameTH} onChange={this.handleInputChange} />
+                      <input ref={(e) => { this.elementFirstnameTH = e }} onKeyUp={event => this.handleKeyPress('elementLastnameTH', event)} className="input" type="text" name="firstnameTH" value={this.state.data.firstnameTH} onChange={this.handleInputChange} />
                     </p>
                   </div>
                   <div className="column">
                     <label className="label">นามสกุล</label>
                     <p className="control">
-                      <input ref={(e) => { this.elementLastnameTH = e }} onKeyPress={event => this.handleKeyPress('elementPosition', event)} className="input" type="text" name="lastnameTH" value={this.state.data.lastnameTH} onChange={this.handleInputChange} />
+                      <input ref={(e) => { this.elementLastnameTH = e }} onKeyUp={event => this.handleKeyPress('elementPosition', event)} className="input" type="text" name="lastnameTH" value={this.state.data.lastnameTH} onChange={this.handleInputChange} />
                     </p>
                   </div>
                 </div>
                 <label className="label">ตำแหน่ง</label>
                 <p className="control">
-                  <input ref={(e) => { this.elementPosition = e }} onKeyPress={event => this.handleKeyPress('elementSchool', event)} className="input" type="text" name="position" value={this.state.data.position} onChange={this.handleInputChange} />
+                  <input ref={(e) => { this.elementPosition = e }} onKeyUp={event => this.handleKeyPress('elementSchool', event)} className="input" type="text" name="position" value={this.state.data.position} onChange={this.handleInputChange} />
                 </p>
                 <div className="columns">
                   <div className="column">
                     <label className="label">โรงเรียน</label>
                     <p className="control">
-                      <input ref={(e) => { this.elementSchool = e }} onKeyPress={event => this.handleKeyPress('elementAddress', event)} className="input" type="text" name="school" value={this.state.data.school} onChange={this.handleInputChange} />
+                      <input ref={(e) => { this.elementSchool = e }} onKeyUp={event => this.handleKeyPress('elementAddress', event)} className="input" type="text" name="school" value={this.state.data.school} onChange={this.handleInputChange} />
                     </p>
                   </div>
                   <div className="column">
                     <label className="label">ที่อยู่ (จังหวัด, อำเภอ)</label>
                     <p className="control">
-                      <input ref={(e) => { this.elementAddress = e }} onKeyPress={event => this.handleKeyPress('elementStudent', event)} className="input" type="text" name="address" value={this.state.data.address} onChange={this.handleInputChange} />
+                      <input ref={(e) => { this.elementAddress = e }} onKeyUp={event => this.handleKeyPress('elementStudent', event)} className="input" type="text" name="address" value={this.state.data.address} onChange={this.handleInputChange} />
                     </p>
                   </div>
                 </div>
@@ -99,13 +129,13 @@ class Register extends Component {
                   <div className="column">
                     <label className="label">จำนวนนักเรียน</label>
                     <p className="control">
-                      <input ref={(e) => { this.elementStudent = e }} onKeyPress={event => this.handleKeyPress('elementMobile', event)} className="input" type="text" name="student" value={this.state.data.student} onChange={this.handleInputChange} />
+                      <input ref={(e) => { this.elementStudent = e }} onKeyUp={event => this.handleKeyPress('elementMobile', event)} className="input" type="text" name="student" value={this.state.data.student} onChange={this.handleInputChange} />
                     </p>
                   </div>
                   <div className="column">
                     <label className="label">เบอร์ติดต่อ</label>
                     <p className="control">
-                      <input ref={(e) => { this.elementMobile = e }} onKeyPress={event => this.handleRegisEnter(event)} className="input" type="text" name="mobile" value={this.state.data.mobile} onChange={this.handleInputChange} />
+                      <input ref={(e) => { this.elementMobile = e }} onKeyUp={event => this.handleRegisEnter(event)} className="input" type="text" name="mobile" value={this.state.data.mobile} onChange={this.handleInputChange} />
                     </p>
                   </div>
                 </div>
@@ -117,7 +147,6 @@ class Register extends Component {
             </footer>
           </div>
         </div>
-        
       </div>
     )
   }
