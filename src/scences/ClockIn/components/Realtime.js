@@ -3,13 +3,15 @@ import { SocketProvider } from 'socket.io-react'
 import io from 'socket.io-client'
 import { TransitionMotion, spring, presets } from 'react-motion'
 import moment from 'moment'
-require('moment/locale/th')
 import { Title, Columns, Column, Notification } from 're-bulma'
 import { webfont, avatar } from '../../../config/style'
 
+require('moment/locale/th')
+
 const uri = process.env.REACT_APP_SOCKET_URI
+const imgHost = process.env.REACT_APP_HOST_IMAGE_STUDENT
 const socket = io.connect(uri, { secure: true })
-const schoolId = 132
+const schoolId = process.env.REACT_APP_SCHOOL_ID
 
 const ClockDetail = ({ clock }) => {
   const clockTime = moment(clock.time).locale('th')
@@ -18,7 +20,7 @@ const ClockDetail = ({ clock }) => {
     <Notification style={{ margin: 15 }}>
       <Columns>
         <Column size="is4">
-          <img src={`https://randomuser.me/api/portraits/women/${Math.floor(Math.random() * 80) + 1}.jpg`} style={avatar} alt={`${clock.firstname} ${clock.lastname}`} />
+          <img src={`${imgHost}${clock.image}`} style={avatar} alt={`${clock.firstname} ${clock.lastname}`} />
         </Column>
         <Column size="is6" style={{ textAlign: 'left', paddingTop: 20 }}>
           <Title size="is1" style={{ ...webfont, fontSize: '62px' }}>{clock.firstname} {clock.lastname}</Title>
