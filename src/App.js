@@ -1,28 +1,23 @@
 import React, { Component, PropTypes } from 'react'
-import { Container, Content, Hero, HeroBody, HeroFoot, Title, Subtitle, Icon, Image, Columns, Column, Box, LevelLeft, Section, Heading } from 're-bulma'
+import { Container, Hero, HeroBody, Title, Subtitle, Image, Columns, Column, Box, LevelLeft, Section, Heading } from 're-bulma'
 import reactKeydown from 'react-keydown'
 import clone from 'lodash.clonedeep'
 import 'whatwg-fetch'
 import 'tracking'
 import 'bulma/css/bulma.css'
-
-import Webcam from './components/Webcam'
-import dimensions from './components/Dimensions'
-import RecentCardList from './components/RecentCardList'
-import Menu from './components/Menu/'
-import SmartCard from './components/SmartCard'
-import Clock from './components/Clock'
-import Register from './components/Register'
-import Loading from './components/Loading'
+import { Webcam, dimensions, RecentCardList, Menu, SmartCard, Clock, Register, Footer } from './components/'
 import cardTemplateList from './config/cardTemplate'
-import mascot from './img/mascot.svg'
-import brand from './img/textOnly.svg'
-import imgCamera from './img/camera.png'
 import regisData from './data/RegisData.json'
 
 import './data/face-min'
 import './App.css'
 import { defaultStyle, styleForMacbook, style, webfont, macbookWidth } from './config/style'
+
+
+import brand from './img/textOnly.svg'
+import mascot from './img/mascot.svg'
+import imgCamera from './img/camera.png'
+
 
 class App extends Component {
   constructor() {
@@ -347,7 +342,7 @@ class App extends Component {
     }
     return (
       <div className="App" id="page-wrap">
-        <Loading mode={this.state.isLoading} />
+        {/* <Loading mode={this.state.isLoading} /> */}
         <Menu />
         <Hero size="isFullheight">
           <Section className="App-heroSection" style={{ padding: '20px' }}>
@@ -411,15 +406,7 @@ class App extends Component {
               </Columns>
             </Container>
           </HeroBody>
-          <HeroFoot>
-            <Container>
-              <Content>
-                <p style={{ textAlign: 'center', padding: '10px' }}>
-                  made with <Icon icon="fa fa-heart" size="isSmall" style={{ color: 'red' }} /> by <a href="http://www.nextgensoft.co.th">Nextgensoft</a>
-                </p>
-              </Content>
-            </Container>
-          </HeroFoot>
+          {Footer}
         </Hero>
       </div>
     )

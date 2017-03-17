@@ -1,0 +1,7 @@
+.stickyFooter {
+      position: absolute;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    background: #fff;
+}

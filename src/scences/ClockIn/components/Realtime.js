@@ -4,7 +4,8 @@ import io from 'socket.io-client'
 import { TransitionMotion, spring, presets } from 'react-motion'
 import moment from 'moment'
 import { Title, Columns, Column, Notification } from 're-bulma'
-import { webfont, avatar } from '../../../config/style'
+import { webfont } from '../../../config/style'
+import './Realtime.css'
 
 require('moment/locale/th')
 
@@ -13,14 +14,18 @@ const imgHost = process.env.REACT_APP_HOST_IMAGE_STUDENT
 const socket = io.connect(uri, { secure: true })
 const schoolId = process.env.REACT_APP_SCHOOL_ID
 
-const ClockDetail = ({ clock }) => {
-  const clockTime = moment(clock.time).locale('th')
+const ClockDetail = ({ clock, highlight }) => {
+const clockTime = moment(clock.time).locale('th')
+const firstItemStyle = highlight ? { borderColor: '#F15C27', border: '2px solid #F15C27' } : {}
+const firstItemClassName = highlight ? 'firstItem ' : 'firstItem effect7'
 
   return (
-    <Notification style={{ margin: 15 }}>
+    <Notification style={{ ...firstItemStyle, margin: 15 }} className={firstItemClassName}>
       <Columns>
         <Column size="is4">
-          <img src={`${imgHost}${clock.image}`} style={avatar} alt={`${clock.firstname} ${clock.lastname}`} />
+          <div className="image-cropper">
+            <img src={`${imgHost}${clock.image}`} className="rounded avatar" alt={`${clock.firstname} ${clock.lastname}`} />
+          </div>
         </Column>
         <Column size="is6" style={{ textAlign: 'left', paddingTop: 20 }}>
           <Title size="is1" style={{ ...webfont, fontSize: '62px' }}>{clock.firstname} {clock.lastname}</Title>
@@ -81,7 +86,7 @@ class ClockListWithMotion extends Component {
           <div>
             {int.map(({ key, style, data }) =>
               <div key={`k${key}`} style={style}>
-                <ClockDetail key={key} clock={data} />
+                <ClockDetail key={key} index={key} clock={data} />
               </div>
             )}
           </div>
@@ -99,39 +104,43 @@ const ClockList = ({ list }) => (
   </div>
 )
 
+
 class Realtime extends Component {
   constructor(props, context) {
     super(props, context)
 
     this.state = {
       clock: [],
+      numClock: 0,
     }
-    this.handleMessage = this.handleMessage.bind(this)
-    socket.on(`clock-${schoolId}`, msg => this.handleMessage(msg))
+    this.addClockItem = this.addClockItem.bind(this)
   }
 
-  handleMessage(msg) {
-    const clockInfo = { ...msg, time: Date.now() }
-    const limitClockInfo = this.state.clock
+  componentDidMount() {
+    socket.on(`clock-${schoolId}`, msg => this.addClockItem(msg))
+  }
 
-    if (limitClockInfo.length >= 9) {
-      limitClockInfo.splice(8)
-    }
+  addClockItem(msg) {
+    const clockInfo = { ...msg, time: Date.now() }
+    const clockList = this.state.clock
+
+    // if (this.state.clock.length >= 9) {
+    //   clockList.splice(8)
+    // }
 
     this.setState({
-      clock: [clockInfo, ...limitClockInfo],
+      clock: [...clockList, clockInfo],
     })
-
-    // console.log(this.state)
   }
 
   render() {
-    console.log(this.state.clock)
+    const items = []
+    for (let index = 0; index < this.state.clock.length; index += 1) {
+      items.unshift(<ClockDetail key={index} highlight={index === (this.state.clock.length - 1)} clock={this.state.clock[index]} />)
+    }
+
     return (
-      <div>
-        <h1>Realtime Clockin</h1>
-        <ClockListWithMotion list={this.state.clock} />
-      </div>
+      <div>{items}</div>
     )
   }
 }
