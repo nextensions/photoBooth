@@ -28,7 +28,7 @@ class Register extends Component {
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleRegisEnter = this.handleRegisEnter.bind(this)
   }
-  componentDidMount() {
+  componentWillReceiveProps() {
     this.flow = [
       this.elementFirstnameTH,
       this.elementLastnameTH,
@@ -38,8 +38,6 @@ class Register extends Component {
       this.elementStudent,
       this.elementMobile,
     ]
-  }
-  componentWillReceiveProps() {
     if (this.props.data && this.props.data[0]) {
       this.setState({ data: this.props.data[0] })
     }
@@ -47,13 +45,13 @@ class Register extends Component {
     if (this.props.isOpen === true && this.state.beforeIsOpen === false) {
       const self = this
       setTimeout(() => {
-        self.flow.find(value => (!value.value)).focus()
+        const temp = self.flow.find(value => (!value.value))
+        if (temp) temp.focus()
       }, 0)
     }
   }
   handleRegis() {
     if (this.state.data) this.props.sendData(this.state.data)
-    this.props.close()
   }
   handleInputChange(event) {
     const target = event.target

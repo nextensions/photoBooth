@@ -13,6 +13,7 @@ import Menu from './components/Menu/'
 import SmartCard from './components/SmartCard'
 import Clock from './components/Clock'
 import Register from './components/Register'
+import Loading from './components/Loading'
 import cardTemplateList from './config/cardTemplate'
 import mascot from './img/mascot.svg'
 import brand from './img/textOnly.svg'
@@ -66,6 +67,7 @@ class App extends Component {
       trackingTask: null,
       registerIsOpen: false,
       registerMode: true,
+      isLoading: 'off',
     }
     this.capture = this.capture.bind(this)
     this.onImgLoad = this.onImgLoad.bind(this)
@@ -78,6 +80,7 @@ class App extends Component {
     this.handleRegisterOpen = this.handleRegisterOpen.bind(this)
     this.handleTrackerStart = this.handleTrackerStart.bind(this)
     this.handleTrackerStop = this.handleTrackerStop.bind(this)
+    this.sendData = this.sendData.bind(this)
   }
   componentDidMount() {
     this.setCardTemplate(0)
@@ -288,6 +291,7 @@ class App extends Component {
     }
   }
   sendData(objectData) {
+    // this.setState({ isLoading: 'loading' })
     const data = new FormData()
     const tempObjectData = clone(objectData)
     delete tempObjectData.canvas // fixbug
@@ -302,6 +306,23 @@ class App extends Component {
       header: { 'Access-Control-Allow-Origin': '*' },
       body: data,
     })
+    // .then((response) => {
+    //   if (response.status >= 200 && response.status < 300) {
+    //     return response
+    //   }
+    //   const error = new Error(response.statusText)
+    //   error.response = response
+    //   throw error
+    // })
+    // .then(response => response.json())
+    // .then((data) => {
+    //   this.setState({ isLoading: 'success' })
+    //   console.log('request succeeded with JSON response', data)
+    // }).catch((error) => {
+    //   this.setState({ isLoading: 'fail' })
+    //   console.log('request failed', error)
+    // })
+    this.handleRegisterClose()
   }
   handleRegisterClose() {
     this.handleTrackerStart()
@@ -326,6 +347,7 @@ class App extends Component {
     }
     return (
       <div className="App" id="page-wrap">
+        <Loading mode={this.state.isLoading} />
         <Menu />
         <Hero size="isFullheight">
           <Section className="App-heroSection" style={{ padding: '20px' }}>
