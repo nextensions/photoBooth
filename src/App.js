@@ -56,7 +56,7 @@ class App extends Component {
         student: '',
         address: '',
         mobile: '',
-        interest: '',
+        interest: [],
         note: '',
       },
       trackingTask: null,
@@ -142,9 +142,9 @@ class App extends Component {
         school: result.school || '',
         position: result.position || '',
         address: result.address || '',
-        mobile: result.mobile || '',
+        mobile: '',
         student: '',
-        interest: '',
+        interest: [],
         note: '',
       },
     }, () => {
@@ -226,7 +226,7 @@ class App extends Component {
         student: '',
         address: '',
         mobile: '',
-        interest: '',
+        interest: [],
         note: '',
       },
     }, () => {
@@ -385,7 +385,7 @@ class App extends Component {
                 </Column>
                 <Column size="is12" style={style}>
                   <SmartCard setPersonInfo={this.setPersonInfo} clearPersonInfo={this.clearPersonInfo} />
-                  <div className="checkbox">
+                  <div className="checkbox" style={{marginBottom: '0.0em'}}>
                       <label style={{fontSize: "1.5em"}}>
                           <input type="checkbox" onChange={() => { this.setState({ registerMode: !this.state.registerMode }) }} checked={this.state.registerMode} />
                           <span className="cr"><i className="cr-icon fa fa-check"></i></span>

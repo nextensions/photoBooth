@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { Container } from 're-bulma'
+import clone from 'lodash.clonedeep'
 
 class Register extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class Register extends Component {
         student: '',
         address: '',
         mobile: '',
-        interest: '',
+        interest: [],
         note: '',
       },
       beforeIsOpen: false,
@@ -39,7 +40,7 @@ class Register extends Component {
       this.elementMobile,
     ]
     if (this.props.data && this.props.data[0]) {
-      this.setState({ data: this.props.data[0] })
+      this.setState({ data: clone(this.props.data[0]) })
     }
     this.setState({ beforeIsOpen: this.props.isOpen })
     if (this.props.isOpen === true && this.state.beforeIsOpen === false) {
@@ -55,10 +56,17 @@ class Register extends Component {
   }
   handleInputChange(event) {
     const target = event.target
-    const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
     const data = this.state.data
-    data[name] = value
+    if (target.type === 'checkbox' && event.target.checked) {
+      data[name].push(+event.target.value)
+    } else if (target.type === 'checkbox') {
+      const index = data[name].indexOf(+event.target.value)
+      data[name].splice(index, 1)
+    } else {
+      const value = target.type === 'checkbox' ? target.checked : target.value
+      data[name] = value
+    }
     this.setState({ data })
   }
   handleRegisEnter(event) {
@@ -133,10 +141,55 @@ class Register extends Component {
                   <div className="column">
                     <label className="label">เบอร์ติดต่อ</label>
                     <p className="control">
-                      <input ref={(e) => { this.elementMobile = e }} onKeyUp={event => this.handleRegisEnter(event)} className="input" type="text" name="mobile" value={this.state.data.mobile} onChange={this.handleInputChange} />
+                      <input ref={(e) => { this.elementMobile = e }} onKeyUp={event => this.handleKeyPress('elementNote', event)} className="input" type="text" name="mobile" value={this.state.data.mobile} onChange={this.handleInputChange} />
                     </p>
                   </div>
                 </div>
+                <label className="label">สนใจเกี่ยวกับ</label>
+                <div className="columns">
+                  <div className="column">
+                    <div className="checkbox">
+                        <label style={{fontSize: "1.0em"}}>
+                          <input type="checkbox" value={1} name="interest" checked={(this.state.data.interest.indexOf(1) >= 0)} onChange={this.handleInputChange} />
+                          <span className="cr"><i className="cr-icon fa fa-check"></i></span>
+                          ระบบดูแลนักเรียน NextSchool
+                        </label>
+                    </div>
+                  </div>
+                  <div className="column">
+                    <div className="checkbox">
+                        <label style={{fontSize: "1.0em"}}>
+                          <input type="checkbox" value={2} name="interest" checked={(this.state.data.interest.indexOf(2) >= 0)} onChange={this.handleInputChange} />
+                          <span className="cr"><i className="cr-icon fa fa-check"></i></span>
+                          ระบบโรงอาหาร
+                        </label>
+                    </div>
+                  </div>
+                </div>
+                <div className="columns">
+                  <div className="column">
+                    <div className="checkbox">
+                        <label style={{fontSize: "1.0em"}}>
+                          <input type="checkbox" value={3} name="interest" checked={(this.state.data.interest.indexOf(3) >= 0)} onChange={this.handleInputChange} />
+                          <span className="cr"><i className="cr-icon fa fa-check"></i></span>
+                          ระบบสแกนรายวิชา
+                        </label>
+                    </div>
+                  </div>
+                  <div className="column">
+                    <div className="checkbox">
+                        <label style={{fontSize: "1.0em"}}>
+                          <input type="checkbox" value={4} name="interest" checked={(this.state.data.interest.indexOf(4) >= 0)} onChange={this.handleInputChange} />
+                          <span className="cr"><i className="cr-icon fa fa-check"></i></span>
+                          บัตรนักเรียน
+                        </label>
+                    </div>
+                  </div>
+                </div>
+                <label className="label">เพิ่มเติม</label>
+                <p className="control">
+                  <textarea ref={(e) => { this.elementNote = e }} onKeyUp={event => this.handleRegisEnter(event)} className="textarea" placeholder="Textarea" name="note" value={this.state.data.note} onChange={this.handleInputChange} ></textarea>
+                </p>
               </Container>
             </section>
             <footer className="modal-card-foot">
