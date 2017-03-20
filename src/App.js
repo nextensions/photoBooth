@@ -58,6 +58,7 @@ class App extends Component {
         mobile: '',
         interest: [],
         note: '',
+        email: '',
       },
       trackingTask: null,
       registerIsOpen: false,
@@ -146,6 +147,7 @@ class App extends Component {
         student: '',
         interest: [],
         note: '',
+        email: '',
       },
     }, () => {
       this.drawCardTemplate()
@@ -228,6 +230,7 @@ class App extends Component {
         mobile: '',
         interest: [],
         note: '',
+        email: '',
       },
     }, () => {
       this.drawCardTemplate()

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Container } from 're-bulma'
 import clone from 'lodash.clonedeep'
+import './Register.css'
 
 class Register extends Component {
   constructor(props) {
@@ -34,10 +35,11 @@ class Register extends Component {
       this.elementFirstnameTH,
       this.elementLastnameTH,
       this.elementPosition,
+      this.elementMobile,
+      this.elementEmail,
       this.elementSchool,
       this.elementAddress,
       this.elementStudent,
-      this.elementMobile,
     ]
     if (this.props.data && this.props.data[0]) {
       this.setState({ data: clone(this.props.data[0]) })
@@ -112,11 +114,27 @@ class Register extends Component {
                       <input ref={(e) => { this.elementLastnameTH = e }} onKeyUp={event => this.handleKeyPress('elementPosition', event)} className="input" type="text" name="lastnameTH" value={this.state.data.lastnameTH} onChange={this.handleInputChange} />
                     </p>
                   </div>
+                  <div className="column">
+                    <label className="label">ตำแหน่ง</label>
+                    <p className="control">
+                      <input ref={(e) => { this.elementPosition = e }} onKeyUp={event => this.handleKeyPress('elementMobile', event)} className="input" type="text" name="position" value={this.state.data.position} onChange={this.handleInputChange} />
+                    </p>
+                  </div>
                 </div>
-                <label className="label">ตำแหน่ง</label>
-                <p className="control">
-                  <input ref={(e) => { this.elementPosition = e }} onKeyUp={event => this.handleKeyPress('elementSchool', event)} className="input" type="text" name="position" value={this.state.data.position} onChange={this.handleInputChange} />
-                </p>
+                <div className="columns">
+                  <div className="column">
+                    <label className="label">เบอร์ติดต่อ</label>
+                    <p className="control">
+                      <input ref={(e) => { this.elementMobile = e }} onKeyUp={event => this.handleKeyPress('elementEmail', event)} className="input" type="text" name="mobile" value={this.state.data.mobile} onChange={this.handleInputChange} />
+                    </p>
+                  </div>
+                  <div className="column">
+                    <label className="label">E-Mail</label>
+                    <p className="control">
+                      <input ref={(e) => { this.elementEmail = e }} onKeyUp={event => this.handleKeyPress('elementSchool', event)} className="input" type="text" name="email" value={this.state.data.email} onChange={this.handleInputChange} />
+                    </p>
+                  </div>
+                </div>
                 <div className="columns">
                   <div className="column">
                     <label className="label">โรงเรียน</label>
@@ -130,18 +148,10 @@ class Register extends Component {
                       <input ref={(e) => { this.elementAddress = e }} onKeyUp={event => this.handleKeyPress('elementStudent', event)} className="input" type="text" name="address" value={this.state.data.address} onChange={this.handleInputChange} />
                     </p>
                   </div>
-                </div>
-                <div className="columns">
                   <div className="column">
                     <label className="label">จำนวนนักเรียน</label>
                     <p className="control">
-                      <input ref={(e) => { this.elementStudent = e }} onKeyUp={event => this.handleKeyPress('elementMobile', event)} className="input" type="text" name="student" value={this.state.data.student} onChange={this.handleInputChange} />
-                    </p>
-                  </div>
-                  <div className="column">
-                    <label className="label">เบอร์ติดต่อ</label>
-                    <p className="control">
-                      <input ref={(e) => { this.elementMobile = e }} onKeyUp={event => this.handleKeyPress('elementNote', event)} className="input" type="text" name="mobile" value={this.state.data.mobile} onChange={this.handleInputChange} />
+                      <input ref={(e) => { this.elementStudent = e }} onKeyUp={event => this.handleKeyPress('elementStudent', event)} className="input" type="text" name="student" value={this.state.data.student} onChange={this.handleInputChange} />
                     </p>
                   </div>
                 </div>
