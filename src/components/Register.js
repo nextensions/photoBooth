@@ -90,7 +90,7 @@ class Register extends Component {
           <span className="icon is-small">
             <i className="fa fa-camera"></i>
           </span>
-          <span>ลงทะเบียน</span>
+          <span>กด Enter เพื่อถ่ายภาพ</span>
         </a>
         <div className={this.props.isOpen ? 'modal is-active' : 'modal'}>
           <div className="modal-background"></div>

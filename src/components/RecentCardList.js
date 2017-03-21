@@ -5,7 +5,7 @@ import ImageZoom from 'react-medium-image-zoom'
 
 const style = { padding: '10px' }
 
-const RecentCard = ({ image, date }) => (
+const RecentCard = ({ image, date, zoom, unzoom }) => (
   <Column size="is2" style={style}>
     <ImageZoom
       image={{
@@ -19,6 +19,8 @@ const RecentCard = ({ image, date }) => (
         alt: 'GCard',
         className: 'App-cardThumbs',
       }}
+      shouldHandleZoom={zoom}
+      onUnzoom={unzoom}
     />
     <div>{ moment(date).format('HH:mm:ss') }</div>
   </Column>
@@ -27,16 +29,20 @@ const RecentCard = ({ image, date }) => (
 RecentCard.propTypes = {
   image: PropTypes.string,
   date: PropTypes.instanceOf(Date),
+  zoom: PropTypes.func.isRequired,
+  unzoom: PropTypes.func.isRequired,
 }
 
-const RecentCardList = ({ cards }) => (
+const RecentCardList = ({ cards, zoom, unzoom }) => (
   <Columns>
-    { cards.map((card, index) => <RecentCard key={index} image={card.imgPath} date={card.date} />) }
+    { cards.map((card, index) => <RecentCard key={index} image={card.imgPath} date={card.date} zoom={zoom} unzoom={unzoom} />) }
   </Columns>
 )
 
 RecentCardList.propTypes = {
   cards: PropTypes.arrayOf(React.PropTypes.object),
+  zoom: PropTypes.func.isRequired,
+  unzoom: PropTypes.func.isRequired,
 }
 
 export default RecentCardList

@@ -62,7 +62,7 @@ class App extends Component {
       },
       trackingTask: null,
       registerIsOpen: false,
-      registerMode: true,
+      registerMode: false,
       isLoading: 'off',
     }
     this.capture = this.capture.bind(this)
@@ -77,6 +77,8 @@ class App extends Component {
     this.handleTrackerStart = this.handleTrackerStart.bind(this)
     this.handleTrackerStop = this.handleTrackerStop.bind(this)
     this.sendData = this.sendData.bind(this)
+    this.handleZoom = this.handleZoom.bind(this)
+    this.handleUnzoom = this.handleUnzoom.bind(this)
   }
   componentDidMount() {
     this.setCardTemplate(0)
@@ -329,6 +331,13 @@ class App extends Component {
   handleRegisterOpen() {
     this.capture()
   }
+  handleZoom() {
+    this.handleTrackerStop()
+    return true
+  }
+  handleUnzoom() {
+    this.handleTrackerStart()
+  }
   render() {
     if (this.props.containerWidth === macbookWidth) {
       defaultStyle.cameraSize = styleForMacbook.cameraSize
@@ -403,7 +412,7 @@ class App extends Component {
                     <LevelLeft>
                       <Subtitle size="is3" style={webfont}>รายการบัตรล่าสุด <Clock format="HH:mm:ss" /></Subtitle>
                     </LevelLeft>
-                    <RecentCardList cards={this.state.cardGenerateList} />
+                    <RecentCardList cards={this.state.cardGenerateList} zoom={this.handleZoom} unzoom={this.handleUnzoom} />
                   </Box>
                 </Column>
               </Columns>
