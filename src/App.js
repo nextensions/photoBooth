@@ -420,6 +420,8 @@ class App extends Component {
           </HeroBody>
           {Footer}
         </Hero>
+        <div className="capture-text">กด Enter เพื่อถ่ายภาพ</div>
+        <div className="arrow-text"><i className="fa fa-3x fa-arrow-down" aria-hidden="true"></i></div>
       </div>
     )
   }

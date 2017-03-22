@@ -171,3 +171,18 @@ h1, h2, h3, h4, h5, h6 {
 .radio label input[type="radio"]:disabled + .cr {
     opacity: .5;
 }
+
+.capture-text {
+  z-index: 1001;
+  position: fixed;
+  top: 410px;
+  left: 70px;
+  font-size: 40px;
+}
+
+.arrow-text {
+  z-index: 1001;
+  position: fixed;
+  top: 455px;
+  left: 430px;
+}
