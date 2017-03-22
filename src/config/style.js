@@ -7,7 +7,7 @@ export const defaultStyle = {
   brandWidth: '180px',
   cameraSize: { width: 480, height: 360 },
   cameraPosition: { top: '425px', left: '390px' },
-  headerStyle: { fontFamily: 'THSarabunNewBold', fontWeight: 'normal', letterSpacing: -1, fontSize: '85px' },
+  headerStyle: { fontFamily: 'THSarabunNewBold', fontWeight: 'normal', letterSpacing: -1, fontSize: '130px' },
 }
 export const styleForMacbook = {
   cardMarginTop: '40px',

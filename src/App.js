@@ -369,7 +369,7 @@ class App extends Component {
             <Container hasTextCentered isFluid>
               <Columns style={defaultStyle.headerStyle}>
                 <Column size="is12" style={style}>
-                  <Title size="is1" style={defaultStyle.headerStyle}>ถ่ายรูปทำบัตรด่วน!</Title>
+                  <Title size="is1" style={defaultStyle.headerStyle}>ระบบทำบัตรที่เร็วที่สุดในประเทศ !!</Title>
                 </Column>
               </Columns>
               <Columns isMultiline>
